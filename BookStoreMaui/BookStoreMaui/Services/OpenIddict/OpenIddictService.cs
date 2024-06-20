@@ -22,6 +22,19 @@ namespace BookStoreMaui.Services.OpenIddict
         public async Task<bool> AuthenticationSuccessful()
         {
             var oidcClient = CreateOidcClient();
+            
+            Func<OidcClientOptions, HttpClient> httpClientFactory = null;
+
+#if DEBUG
+            httpClientFactory = (options) =>
+            {
+                var handler = new HttpsClientHandlerService();
+                return new HttpClient(handler.GetPlatformMessageHandler());
+            };
+#endif
+            oidcClient.Options.HttpClientFactory = httpClientFactory;
+   
+                
             var result = await oidcClient.LoginAsync(new LoginRequest());
 
             var isAuthenticated = !IsNullOrWhiteSpace(result.AccessToken) &&
@@ -80,6 +93,8 @@ namespace BookStoreMaui.Services.OpenIddict
         private OidcClient CreateOidcClient()
         {
             var oIddict = _configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
+            if (oIddict == null) throw new ArgumentNullException(nameof(oIddict));
+            
             var options = new OidcClientOptions
             {
                 Authority = oIddict.AuthorityUrl,
@@ -88,10 +103,44 @@ namespace BookStoreMaui.Services.OpenIddict
                 RedirectUri = oIddict.RedirectUri,
                 ClientSecret = oIddict.ClientSecret,
                 PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
-                Browser = new WebAuthenticatorBrowser()
+                Browser = new WebAuthenticatorBrowser(),
             };
 
             return new OidcClient(options);
         }
+    }
+
+    public class HttpsClientHandlerService
+    {
+        public HttpMessageHandler GetPlatformMessageHandler()
+        {
+#if ANDROID
+            var handler = new Xamarin.Android.Net.AndroidMessageHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            {
+                if (cert != null && cert.Issuer.Equals("CN=localhost"))
+                    return true;
+                return errors == System.Net.Security.SslPolicyErrors.None;
+            };
+            return handler;
+#elif IOS
+        var handler = new NSUrlSessionHandler
+        {
+            TrustOverrideForUrl = IsHttpsLocalhost
+        };
+        return handler;
+#else
+        throw new PlatformNotSupportedException("Only Android and iOS supported.");
+#endif
+        }
+
+#if IOS
+    public bool IsHttpsLocalhost(NSUrlSessionHandler sender, string url, Security.SecTrust trust)
+    {
+        if (url.StartsWith("https://localhost"))
+            return true;
+        return false;
+    }
+#endif
     }
 }
