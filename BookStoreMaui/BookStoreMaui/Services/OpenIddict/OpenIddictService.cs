@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using BookStoreMaui.Models;
 using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;

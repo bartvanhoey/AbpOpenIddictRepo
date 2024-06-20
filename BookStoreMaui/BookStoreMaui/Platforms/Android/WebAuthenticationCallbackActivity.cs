@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using BookStoreMaui;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace MauiBookStore
 {
