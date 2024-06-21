@@ -20,33 +20,43 @@ namespace BookStoreMaui.Services.OpenIddict
 
         public async Task<bool> AuthenticationSuccessful()
         {
-            var oidcClient = CreateOidcClient();
+            try
+            {
+                var oidcClient = CreateOidcClient();
             
-            Func<OidcClientOptions, HttpClient> httpClientFactory = null;
+                Func<OidcClientOptions, HttpClient> httpClientFactory = null;
 
 #if DEBUG
-            httpClientFactory = (options) =>
-            {
-                var handler = new HttpsClientHandlerService();
-                return new HttpClient(handler.GetPlatformMessageHandler());
-            };
+                httpClientFactory = (options) =>
+                {
+                    var handler = new HttpsClientHandlerService();
+                    return new HttpClient(handler.GetPlatformMessageHandler());
+                };
 #endif
-            oidcClient.Options.HttpClientFactory = httpClientFactory;
-   
+                oidcClient.Options.HttpClientFactory = httpClientFactory;
+
+
+                var loginRequest = new LoginRequest();
                 
-            var result = await oidcClient.LoginAsync(new LoginRequest());
+                var result = await oidcClient.LoginAsync(loginRequest);
 
-            var isAuthenticated = !IsNullOrWhiteSpace(result.AccessToken) &&
-                                  !IsNullOrWhiteSpace(result.IdentityToken) &&
-                                  !IsNullOrWhiteSpace(result.RefreshToken);
+                var isAuthenticated = !IsNullOrWhiteSpace(result.AccessToken) &&
+                                      !IsNullOrWhiteSpace(result.IdentityToken) &&
+                                      !IsNullOrWhiteSpace(result.RefreshToken);
 
-            if (!isAuthenticated) return false;
+                if (!isAuthenticated) return false;
 
-            await _storageService.SetAccessTokenAsync(result.AccessToken);
-            await _storageService.SetRefreshTokenAsync(result.RefreshToken);
-            await _storageService.SetIdentityTokenTokensAsync(result.IdentityToken);
+                await _storageService.SetAccessTokenAsync(result.AccessToken);
+                await _storageService.SetRefreshTokenAsync(result.RefreshToken);
+                await _storageService.SetIdentityTokenTokensAsync(result.IdentityToken);
 
-            return true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         async Task IOpenIddictService.LogoutAsync()
