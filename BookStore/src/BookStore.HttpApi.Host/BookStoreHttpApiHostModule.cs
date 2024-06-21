@@ -29,6 +29,9 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using OpenIddict.Server;
+using OpenIddict.Server.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BookStore;
 
@@ -70,6 +73,24 @@ public class BookStoreHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
+
+
+    // context.Services.Configure<OpenIddictServerOptions>(OpenIddictServerDefaults.ConfigurationKey, configuration =>
+    // {
+    //     configuration.UseAspNetCore();
+    //     configuration.SetTokenEndpointUris("/connect/token");
+    // });
+
+    context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(options =>
+        {
+            options.Authority = configuration["AuthServer:Authority"];
+            options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+            options.Audience = "BookStoreMaui"; // Replace with your actual audience
+            options.TokenValidationParameters.ValidIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<string[]>();
+        });
+
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
