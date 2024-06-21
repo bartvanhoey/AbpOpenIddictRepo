@@ -15,6 +15,15 @@ namespace BookStoreMaui.Services.OpenIddict
             {
                 var callbackUrl = string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
 
+                var webAuthenticatorOptions = new WebAuthenticatorOptions(){
+                    Url = new Uri(options.StartUrl),
+                    CallbackUrl = new Uri(callbackUrl),
+                    PrefersEphemeralWebBrowserSession = true
+                };;
+
+                // var authenticateAsync = await WebAuthenticator.AuthenticateAsync(webAuthenticatorOptions);
+
+
                 var authResult =
                     await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
                 var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
