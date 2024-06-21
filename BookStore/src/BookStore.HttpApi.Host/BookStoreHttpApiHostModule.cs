@@ -54,7 +54,7 @@ public class BookStoreHttpApiHostModule : AbpModule
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("BookStore");
+                options.AddAudiences(["BookStoreMaui", "BookStore"]);
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
@@ -75,20 +75,20 @@ public class BookStoreHttpApiHostModule : AbpModule
         ConfigureSwaggerServices(context, configuration);
 
 
-    // context.Services.Configure<OpenIddictServerOptions>(OpenIddictServerDefaults.ConfigurationKey, configuration =>
-    // {
-    //     configuration.UseAspNetCore();
-    //     configuration.SetTokenEndpointUris("/connect/token");
-    // });
+        // context.Services.Configure<OpenIddictServerOptions>(OpenIddictServerDefaults.ConfigurationKey, configuration =>
+        // {
+        //     configuration.UseAspNetCore();
+        //     configuration.SetTokenEndpointUris("/connect/token");
+        // });
 
-    context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer(options =>
-        {
-            options.Authority = configuration["AuthServer:Authority"];
-            options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-            options.Audience = "BookStoreMaui"; // Replace with your actual audience
-            options.TokenValidationParameters.ValidIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<string[]>();
-        });
+        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+           .AddJwtBearer(options =>
+            {
+                options.Authority = configuration["AuthServer:Authority"];
+                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.Audience = "BookStoreMaui"; // Replace with your actual audience
+                options.TokenValidationParameters.ValidIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<string[]>();
+            });
 
 
     }
