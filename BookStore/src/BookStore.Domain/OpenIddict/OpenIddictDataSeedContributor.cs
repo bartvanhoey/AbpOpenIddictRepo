@@ -128,6 +128,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         // MauiBookStore client
         var mauiScopes = new List<string>
     {
+        "openid",
         "offline_access",
         OpenIddictConstants.Permissions.Scopes.Address,
         OpenIddictConstants.Permissions.Scopes.Email,

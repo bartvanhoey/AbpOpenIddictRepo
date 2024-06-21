@@ -113,6 +113,7 @@ namespace BookStoreMaui.Services.OpenIddict
                 ClientSecret = oIddict.ClientSecret,
                 PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
                 Browser = new WebAuthenticatorBrowser(),
+                RefreshDiscoveryDocumentForLogin = false,
             };
 
             return new OidcClient(options);
