@@ -40,10 +40,4 @@ namespace BookStoreMaui.Services.OpenIddict
             };
         }
     }
-    
-    public static class WebAuthenticatorResultExtensions
-    {
-        public static BrowserResult GetBrowserResult(this WebAuthenticatorResult result, string optionsEndUrl) 
-            => new() { Response = $"{optionsEndUrl}#{Join("&", result.Properties.Select(pair => $"{pair.Key}={pair.Value}"))}" };
-    }
 }
