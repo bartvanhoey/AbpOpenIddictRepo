@@ -13,12 +13,12 @@ public class HttpsClientHandlerService
                 return errors == System.Net.Security.SslPolicyErrors.None;
             };
             return handler;
-#elif IOS
-        var handler = new NSUrlSessionHandler
-        {
-            TrustOverrideForUrl = IsHttpsLocalhost
-        };
-        return handler;
+// #elif IOS
+        // var handler = new NSUrlSessionHandler
+        // {
+        //     TrustOverrideForUrl = IsHttpsLocalhost
+        // };
+        // return handler;
 #else
         throw new PlatformNotSupportedException("Only Android and iOS supported.");
 #endif
