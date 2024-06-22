@@ -6,7 +6,7 @@ public class HttpsClientHandlerService
     {
 #if ANDROID
             var handler = new Xamarin.Android.Net.AndroidMessageHandler();
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            handler.ServerCertificateCustomValidationCallback = (_, cert, _, errors) =>
             {
                 if (cert is { Issuer: "CN=localhost" })
                     return true;
