@@ -147,11 +147,11 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 type: OpenIddictConstants.ClientTypes.Confidential,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
                 scopes: mauiScopes,
-                grantTypes: new List<string>
-                {
-                OpenIddictConstants.GrantTypes.AuthorizationCode,
-                OpenIddictConstants.GrantTypes.RefreshToken
-                },
+                grantTypes:
+                [
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.GrantTypes.RefreshToken
+                ],
                 secret: configurationSection["BookStore_Maui:ClientSecret"],
                 redirectUri: $"{mauiRootUrl}",
                 postLogoutRedirectUri: $"{mauiRootUrl}",

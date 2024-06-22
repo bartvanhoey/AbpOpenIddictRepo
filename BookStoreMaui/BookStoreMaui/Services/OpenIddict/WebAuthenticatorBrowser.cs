@@ -21,11 +21,10 @@ namespace BookStoreMaui.Services.OpenIddict
                     PrefersEphemeralWebBrowserSession = true
                 };;
 
-                // var authenticateAsync = await WebAuthenticator.AuthenticateAsync(webAuthenticatorOptions);
+                var authResult = await WebAuthenticator.AuthenticateAsync(webAuthenticatorOptions);
 
-
-                var authResult =
-                    await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
+                // var authResult =
+                //     await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
                 var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
                 return new BrowserResult
                 {
