@@ -8,7 +8,7 @@ public class HttpsClientHandlerService
             var handler = new Xamarin.Android.Net.AndroidMessageHandler();
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
             {
-                if (cert != null && cert.Issuer.Equals("CN=localhost"))
+                if (cert is { Issuer: "CN=localhost" })
                     return true;
                 return errors == System.Net.Security.SslPolicyErrors.None;
             };
@@ -17,7 +17,6 @@ public class HttpsClientHandlerService
         var handler = new NSUrlSessionHandler
         {
             TrustOverrideForUrl = IsHttpsLocalhost,
-            // AllowUntrustedCertificates = true   
         };
         return handler;
 #else
