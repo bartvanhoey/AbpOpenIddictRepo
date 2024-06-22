@@ -2,7 +2,6 @@
 using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
-using static System.String;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict
@@ -15,22 +14,11 @@ namespace BookStoreMaui.Services.OpenIddict
             try
             {
                 var oidcClient = CreateOidcClient();
+                var loginResult = await oidcClient.LoginAsync(new LoginRequest());
+                if (loginResult.IsNotAuthenticated()) return false;
 
-
-                var loginRequest = new LoginRequest();
-
-                var result = await oidcClient.LoginAsync(loginRequest);
-
-                var isAuthenticated = !IsNullOrWhiteSpace(result.AccessToken) &&
-                                      !IsNullOrWhiteSpace(result.IdentityToken) &&
-                                      !IsNullOrWhiteSpace(result.RefreshToken);
-
-                if (!isAuthenticated) return false;
-
-                await storageService.SetAccessTokenAsync(result.AccessToken);
-                await storageService.SetRefreshTokenAsync(result.RefreshToken);
-                await storageService.SetIdentityTokenTokensAsync(result.IdentityToken);
-
+                await storageService.SetOpenIddictTokensAsync(loginResult);
+                
                 return true;
             }
             catch (Exception e)
@@ -47,15 +35,14 @@ namespace BookStoreMaui.Services.OpenIddict
             {
                 var result = await oidcClient.LogoutAsync(new LogoutRequest
                 {
-                    IdTokenHint = await storageService.GetIdentityTokenTokenAsync(),
+                    IdTokenHint = await storageService.GetIdentityTokenAsync(),
                     BrowserDisplayMode = DisplayMode.Hidden,
                 });
 
                 if (result.IsError) await Task.CompletedTask;
                 else
                 {
-                    await storageService.RemoveAccessTokenAsync();
-                    await storageService.RemoveRefreshTokenAsync();
+                    await storageService.RemoveOpenIddictTokensAsync();
                 }
             }
             catch (Exception e)
@@ -106,7 +93,6 @@ namespace BookStoreMaui.Services.OpenIddict
 
             client.Options.HttpClientFactory = HttpClientFactory;
 #endif
-
 
             return client;
         }
