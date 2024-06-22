@@ -2,6 +2,7 @@
 using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
+using static BookStoreMaui.Services.OpenIddict.HttpMessageHandlerResolver;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict
@@ -14,11 +15,11 @@ namespace BookStoreMaui.Services.OpenIddict
             try
             {
                 var oidcClient = CreateOidcClient();
-                var loginResult = await oidcClient.LoginAsync(new LoginRequest());
-                if (loginResult.IsNotAuthenticated()) return false;
-
-                await storageService.SetOpenIddictTokensAsync(loginResult);
+                var login = await oidcClient.LoginAsync(new LoginRequest());
                 
+                if (login.IsNotAuthenticated()) return false;
+                
+                await storageService.SetOpenIddictTokensAsync(login);
                 return true;
             }
             catch (Exception e)
@@ -58,8 +59,7 @@ namespace BookStoreMaui.Services.OpenIddict
         {
             var accessToken = await storageService.GetAccessTokenAsync();
             if (string.IsNullOrWhiteSpace(accessToken))
-                return
-                    false;
+                return false;
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(accessToken);
             var isValid = token != null && token.ValidFrom < DateTime.UtcNow && token.ValidTo > DateTime.UtcNow;
@@ -70,7 +70,7 @@ namespace BookStoreMaui.Services.OpenIddict
         private OidcClient CreateOidcClient()
         {
             var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
-            if (oIddict == null) throw new ArgumentNullException(nameof(oIddict));
+            if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
 
             var oidcClientOptions = new OidcClientOptions
             {
@@ -85,15 +85,8 @@ namespace BookStoreMaui.Services.OpenIddict
             var client = new OidcClient(oidcClientOptions);
 
 #if DEBUG
-            HttpClient HttpClientFactory(OidcClientOptions options)
-            {
-                var handler = new HttpsClientHandlerService();
-                return new HttpClient(handler.GetPlatformMessageHandler());
-            }
-
-            client.Options.HttpClientFactory = HttpClientFactory;
+            client.Options.HttpClientFactory = OidcClientOptionsExtensions.GetHttpClientByPlatform;
 #endif
-
             return client;
         }
     }

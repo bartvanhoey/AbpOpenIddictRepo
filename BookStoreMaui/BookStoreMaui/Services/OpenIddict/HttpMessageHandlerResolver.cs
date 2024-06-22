@@ -1,8 +1,8 @@
 namespace BookStoreMaui.Services.OpenIddict;
 
-public class HttpsClientHandlerService
+public static class HttpMessageHandlerResolver
 {
-    public HttpMessageHandler GetPlatformMessageHandler()
+    public static HttpMessageHandler GetHttpMessageHandlerByPlatform()
     {
 #if ANDROID
             var handler = new Xamarin.Android.Net.AndroidMessageHandler();
@@ -16,7 +16,7 @@ public class HttpsClientHandlerService
 #elif IOS
         var handler = new NSUrlSessionHandler
         {
-            TrustOverrideForUrl = IsHttpsLocalhost,
+            TrustOverrideForUrl = (_, url, _) => url.StartsWith("https://localhost") || url.Contains(".ngrok-free.app"),
         };
         return handler;
 #else
@@ -24,12 +24,5 @@ public class HttpsClientHandlerService
 #endif
     }
 
-#if IOS
-    public bool IsHttpsLocalhost(NSUrlSessionHandler sender, string url, Security.SecTrust trust)
-    {
-        if (url.StartsWith("https://localhost") || url.Contains(".ngrok-free.app"))
-            return true;
-        return false;
-    }
-#endif
+
 }
