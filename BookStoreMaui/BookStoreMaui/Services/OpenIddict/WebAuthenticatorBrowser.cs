@@ -1,31 +1,29 @@
 ﻿using IdentityModel.OidcClient.Browser;
+using static System.String;
 using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
 
 namespace BookStoreMaui.Services.OpenIddict
 {
-    internal class WebAuthenticatorBrowser : IBrowser
+    internal class WebAuthenticatorBrowser(string? callbackUrl = null) : IBrowser
     {
-        private readonly string _callbackUrl;
-        public WebAuthenticatorBrowser(string callbackUrl = null) => _callbackUrl = callbackUrl ?? "";
-
+        private readonly string _callbackUrl = callbackUrl ?? "";
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options,
             CancellationToken cancellationToken = default)
         {
             try
             {
-                var callbackUrl = string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
+                var callbackUrl = IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
 
-                var webAuthenticatorOptions = new WebAuthenticatorOptions(){
+                var authenticatorOptions = new WebAuthenticatorOptions
+                {
                     Url = new Uri(options.StartUrl),
                     CallbackUrl = new Uri(callbackUrl),
                     PrefersEphemeralWebBrowserSession = true
                 };;
 
-                var authResult = await WebAuthenticator.AuthenticateAsync(webAuthenticatorOptions);
-
-                // var authResult =
-                //     await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
+                var authResult = await WebAuthenticator.Default.AuthenticateAsync(authenticatorOptions);
                 var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
+
                 return new BrowserResult
                 {
                     Response = authorizeResponse
@@ -52,7 +50,7 @@ namespace BookStoreMaui.Services.OpenIddict
         private static string ToRawIdentityUrl(string redirectUrl, WebAuthenticatorResult result)
         {
             var parameters = result.Properties.Select(pair => $"{pair.Key}={pair.Value}");
-            var values = string.Join("&", parameters);
+            var values = Join("&", parameters);
             return $"{redirectUrl}#{values}";
         }
     }

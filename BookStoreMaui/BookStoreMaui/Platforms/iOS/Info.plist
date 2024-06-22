@@ -32,10 +32,10 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>BookStoreMaui</string>
+			<string>My BookStore App</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>mybookstoremaui</string>
+				<string>bookstoremaui</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>

@@ -1,4 +1,6 @@
 ﻿// using Android.Runtime;
+
+using System.ComponentModel.DataAnnotations;
 using CoreSpotlight;
 using Foundation;
 using UIKit;
@@ -10,22 +12,21 @@ public class AppDelegate : MauiUIApplicationDelegate
 {
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     
+    private const string iOsRedirectUri = "boostor://";
     
     public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
     {
-        // if (Microsoft.Maui.Essentials.Platform.OpenUrl(app, url, options))
-            return true;
-
         return base.OpenUrl(app, url, options);
     }
 
     public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
     {
-        CheckForAppLink(userActivity);
+        // CheckForAppLink(userActivity);
         return true;
     }
-    
-    
+
+
+
     void CheckForAppLink(NSUserActivity userActivity)
     {
         var strLink = string.Empty;
