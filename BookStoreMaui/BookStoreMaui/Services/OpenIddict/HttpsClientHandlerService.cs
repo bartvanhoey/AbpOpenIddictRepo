@@ -27,7 +27,7 @@ public class HttpsClientHandlerService
 #if IOS
     public bool IsHttpsLocalhost(NSUrlSessionHandler sender, string url, Security.SecTrust trust)
     {
-        if (url.StartsWith("https://localhost") || url.EndsWith(".ngrok-free.app/.well-known/openid-configuration"))
+        if (url.StartsWith("https://localhost"))
             return true;
         return false;
     }

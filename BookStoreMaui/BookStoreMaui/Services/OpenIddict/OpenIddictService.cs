@@ -24,16 +24,17 @@ namespace BookStoreMaui.Services.OpenIddict
             {
                 var oidcClient = CreateOidcClient();
             
-                Func<OidcClientOptions, HttpClient> httpClientFactory = null;
 
 #if DEBUG
-                httpClientFactory = (options) =>
+                HttpClient HttpClientFactory(OidcClientOptions options)
                 {
                     var handler = new HttpsClientHandlerService();
                     return new HttpClient(handler.GetPlatformMessageHandler());
-                };
+                }
+
+                oidcClient.Options.HttpClientFactory = HttpClientFactory;
 #endif
-                oidcClient.Options.HttpClientFactory = httpClientFactory;
+              
 
 
                 var loginRequest = new LoginRequest();
