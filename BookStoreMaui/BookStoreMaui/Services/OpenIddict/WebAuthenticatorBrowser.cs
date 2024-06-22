@@ -7,51 +7,43 @@ namespace BookStoreMaui.Services.OpenIddict
     internal class WebAuthenticatorBrowser(string? callbackUrl = null) : IBrowser
     {
         private readonly string _callbackUrl = callbackUrl ?? "";
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options,
-            CancellationToken cancellationToken = default)
+        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
             try
             {
-                var callbackUrl = IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
-
                 var authenticatorOptions = new WebAuthenticatorOptions
                 {
                     Url = new Uri(options.StartUrl),
-                    CallbackUrl = new Uri(callbackUrl),
+                    CallbackUrl = new Uri(IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl),
                     PrefersEphemeralWebBrowserSession = true
-                };;
+                };
 
                 var authResult = await WebAuthenticator.Default.AuthenticateAsync(authenticatorOptions);
-                var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
-
-                return new BrowserResult
-                {
-                    Response = authorizeResponse
-                };
+                return authResult.GetBrowserResult(options.EndUrl);
             }
             catch (TaskCanceledException ex)
             {
-                return new BrowserResult
-                {
-                    ResultType = BrowserResultType.UnknownError,
-                    Error = ex.ToString()
-                };
+                return GetBrowserResult(ex);
             }
             catch (Exception ex)
             {
-                return new BrowserResult
-                {
-                    ResultType = BrowserResultType.UnknownError,
-                    Error = ex.ToString()
-                };
+              return  GetBrowserResult(ex);
             }
         }
 
-        private static string ToRawIdentityUrl(string redirectUrl, WebAuthenticatorResult result)
+        private static BrowserResult GetBrowserResult(Exception ex)
         {
-            var parameters = result.Properties.Select(pair => $"{pair.Key}={pair.Value}");
-            var values = Join("&", parameters);
-            return $"{redirectUrl}#{values}";
+            return new BrowserResult
+            {
+                ResultType = BrowserResultType.UnknownError,
+                Error = ex.ToString()
+            };
         }
+    }
+    
+    public static class WebAuthenticatorResultExtensions
+    {
+        public static BrowserResult GetBrowserResult(this WebAuthenticatorResult result, string optionsEndUrl) 
+            => new() { Response = $"{optionsEndUrl}#{Join("&", result.Properties.Select(pair => $"{pair.Key}={pair.Value}"))}" };
     }
 }

@@ -7,38 +7,18 @@ using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict
 {
-    public class OpenIddictService : IOpenIddictService
+    public class OpenIddictService(IConfiguration configuration, ISecureStorageService storageService)
+        : IOpenIddictService
     {
-        private readonly IConfiguration _configuration;
-        private readonly ISecureStorageService _storageService;
-
-        public OpenIddictService(IConfiguration configuration, ISecureStorageService storageService)
-        {
-            _configuration = configuration;
-            _storageService = storageService;
-        }
-
         public async Task<bool> AuthenticationSuccessful()
         {
             try
             {
                 var oidcClient = CreateOidcClient();
-            
-
-#if DEBUG
-                HttpClient HttpClientFactory(OidcClientOptions options)
-                {
-                    var handler = new HttpsClientHandlerService();
-                    return new HttpClient(handler.GetPlatformMessageHandler());
-                }
-
-                oidcClient.Options.HttpClientFactory = HttpClientFactory;
-#endif
-              
 
 
                 var loginRequest = new LoginRequest();
-                
+
                 var result = await oidcClient.LoginAsync(loginRequest);
 
                 var isAuthenticated = !IsNullOrWhiteSpace(result.AccessToken) &&
@@ -47,9 +27,9 @@ namespace BookStoreMaui.Services.OpenIddict
 
                 if (!isAuthenticated) return false;
 
-                await _storageService.SetAccessTokenAsync(result.AccessToken);
-                await _storageService.SetRefreshTokenAsync(result.RefreshToken);
-                await _storageService.SetIdentityTokenTokensAsync(result.IdentityToken);
+                await storageService.SetAccessTokenAsync(result.AccessToken);
+                await storageService.SetRefreshTokenAsync(result.RefreshToken);
+                await storageService.SetIdentityTokenTokensAsync(result.IdentityToken);
 
                 return true;
             }
@@ -67,15 +47,15 @@ namespace BookStoreMaui.Services.OpenIddict
             {
                 var result = await oidcClient.LogoutAsync(new LogoutRequest
                 {
-                    IdTokenHint = await _storageService.GetIdentityTokenTokenAsync(),
+                    IdTokenHint = await storageService.GetIdentityTokenTokenAsync(),
                     BrowserDisplayMode = DisplayMode.Hidden,
                 });
 
                 if (result.IsError) await Task.CompletedTask;
                 else
                 {
-                    await _storageService.RemoveAccessTokenAsync();
-                    await _storageService.RemoveRefreshTokenAsync();
+                    await storageService.RemoveAccessTokenAsync();
+                    await storageService.RemoveRefreshTokenAsync();
                 }
             }
             catch (Exception e)
@@ -89,7 +69,7 @@ namespace BookStoreMaui.Services.OpenIddict
 
         private async Task<bool> IsAccessTokenValidAsync()
         {
-            var accessToken = await _storageService.GetAccessTokenAsync();
+            var accessToken = await storageService.GetAccessTokenAsync();
             if (string.IsNullOrWhiteSpace(accessToken))
                 return
                     false;
@@ -102,10 +82,10 @@ namespace BookStoreMaui.Services.OpenIddict
 
         private OidcClient CreateOidcClient()
         {
-            var oIddict = _configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
+            var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
             if (oIddict == null) throw new ArgumentNullException(nameof(oIddict));
-            
-            var options = new OidcClientOptions
+
+            var oidcClientOptions = new OidcClientOptions
             {
                 Authority = oIddict.AuthorityUrl,
                 ClientId = oIddict.ClientId,
@@ -115,8 +95,20 @@ namespace BookStoreMaui.Services.OpenIddict
                 PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
                 Browser = new WebAuthenticatorBrowser(),
             };
+            var client = new OidcClient(oidcClientOptions);
 
-            return new OidcClient(options);
+#if DEBUG
+            HttpClient HttpClientFactory(OidcClientOptions options)
+            {
+                var handler = new HttpsClientHandlerService();
+                return new HttpClient(handler.GetPlatformMessageHandler());
+            }
+
+            client.Options.HttpClientFactory = HttpClientFactory;
+#endif
+
+
+            return client;
         }
     }
 }
