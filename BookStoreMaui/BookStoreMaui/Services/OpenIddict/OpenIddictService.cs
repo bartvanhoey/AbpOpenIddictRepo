@@ -2,6 +2,7 @@
 using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
+using static BookStoreMaui.Services.OpenIddict.Infra.AccessTokenValidator;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict;
@@ -13,9 +14,7 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
     {
         try
         {
-            var oidcClient = configuration.GetOidcSettings().CreateClient();
-            var login = await oidcClient.LoginAsync(new LoginRequest());
-                
+            var login = await configuration.GetOidcSettings().CreateClient().LoginAsync(new LoginRequest());
             if (login.IsNotAuthenticated()) return false;
                 
             await storageService.SetOpenIddictTokensAsync(login);
@@ -30,16 +29,15 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
 
    public async Task LogoutAsync()
     {
-        var oidcClient = configuration.GetOidcSettings().CreateClient();
         try
         {
-            var result = await oidcClient.LogoutAsync(new LogoutRequest
+            var logout = await configuration.GetOidcSettings().CreateClient().LogoutAsync(new LogoutRequest
             {
                 IdTokenHint = await storageService.GetIdentityTokenAsync(),
                 BrowserDisplayMode = DisplayMode.Hidden,
             });
 
-            if (result.IsError) await Task.CompletedTask;
+            if (logout.IsError) await Task.CompletedTask;
             else
             {
                 await storageService.RemoveOpenIddictTokensAsync();
@@ -52,12 +50,6 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
         }
     }
 
-    public async Task<bool> IsUserLoggedInAsync()
-    {
-        var accessToken = await storageService.GetAccessTokenAsync();
-        return AccessTokenValidator.IsAccessTokenValid(accessToken);
-    }
-
-
-
+    public async Task<bool> IsUserLoggedInAsync() 
+        => IsAccessTokenValid(await storageService.GetAccessTokenAsync());
 }
