@@ -5,7 +5,7 @@
              x:Class="BookStoreMaui.Pages.LogoutPage">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="40" IsVisible="{Binding IsLoginVisible}">
-            <Button Text="Logout" FontAttributes="Bold" Command="{Binding LogoutCommand}" HorizontalOptions="FillAndExpand" />
+            <Button Text="Are your sure to Logout?" FontAttributes="Bold" Command="{Binding LogoutCommand}" HorizontalOptions="FillAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
