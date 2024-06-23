@@ -7,7 +7,7 @@ namespace BookStoreMaui.Services.OpenIddict;
 
 public static class OidcClientCreator
 {
-    public static OidcClient CreateOidcClient(OpenIddictSettings settings)
+    public static OidcClient CreateClient(this OpenIddictSettings settings)
     {
         ThrowIfNull(settings);
 
@@ -30,26 +30,10 @@ public static class OidcClientCreator
 
     }
 
-    public static OidcClient CreateOidcClient(IConfiguration configuration)
+    public static OpenIddictSettings GetOidcSettings(this IConfiguration configuration)
     {
         var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
         if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
-
-        var oidcClientOptions = new OidcClientOptions
-        {
-            Authority = oIddict.AuthorityUrl,
-            ClientId = oIddict.ClientId,
-            Scope = oIddict.Scope,
-            RedirectUri = oIddict.RedirectUri,
-            ClientSecret = oIddict.ClientSecret,
-            PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
-            Browser = new WebAuthenticatorBrowser(),
-        };
-        var client = new OidcClient(oidcClientOptions);
-
-#if DEBUG
-        client.Options.HttpClientFactory = HttpClientResolver.GetHttpClientByPlatform;
-#endif
-        return client;
+        return oIddict;
     }
 }
