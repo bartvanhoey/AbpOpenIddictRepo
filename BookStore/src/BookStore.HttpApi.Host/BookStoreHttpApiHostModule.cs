@@ -75,6 +75,7 @@ public class BookStoreHttpApiHostModule : AbpModule
         ConfigureSwaggerServices(context, configuration);
 
 
+        // Should this be here?
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            .AddJwtBearer(options =>
             {
