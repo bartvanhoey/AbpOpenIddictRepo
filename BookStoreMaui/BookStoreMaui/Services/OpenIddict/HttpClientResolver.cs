@@ -2,7 +2,7 @@ using IdentityModel.OidcClient;
 
 namespace BookStoreMaui.Services.OpenIddict;
 
-public static class OidcClientOptionsExtensions
+public static class HttpClientResolver
 {
     public static HttpClient GetHttpClientByPlatform(this OidcClientOptions options)
         => new(GetHttpMessageHandlerByPlatform());

@@ -1,8 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using BookStoreMaui.Services.SecureStorage;
+﻿using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
-using static BookStoreMaui.Services.OpenIddict.HttpMessageHandlerResolver;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict
@@ -53,17 +51,10 @@ namespace BookStoreMaui.Services.OpenIddict
             }
         }
 
-        public async Task<bool> IsUserLoggedInAsync() => await IsAccessTokenValidAsync();
-
-        private async Task<bool> IsAccessTokenValidAsync()
+        public async Task<bool> IsUserLoggedInAsync()
         {
             var accessToken = await storageService.GetAccessTokenAsync();
-            if (string.IsNullOrWhiteSpace(accessToken))
-                return false;
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(accessToken);
-            var isValid = token != null && token.ValidFrom < DateTime.UtcNow && token.ValidTo > DateTime.UtcNow;
-            return isValid;
+            return AccessTokenValidator.IsAccessTokenValid(accessToken);
         }
 
 
@@ -85,7 +76,7 @@ namespace BookStoreMaui.Services.OpenIddict
             var client = new OidcClient(oidcClientOptions);
 
 #if DEBUG
-            client.Options.HttpClientFactory = OidcClientOptionsExtensions.GetHttpClientByPlatform;
+            client.Options.HttpClientFactory = HttpClientResolver.GetHttpClientByPlatform;
 #endif
             return client;
         }
