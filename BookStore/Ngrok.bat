@@ -1,6 +1,6 @@
 @echo off
 
-set sourceFile="C:\Data\ABP\AbpMaui\BookStoreMaui\BookStoreMaui\appsettings.json"
+set targetFile="C:\Data\ABP\AbpMaui\BookStoreMaui\BookStoreMaui\appsettings.json"
 set portNumber=44336
 
 setlocal disabledelayedexpansion
@@ -15,7 +15,7 @@ for /F %%I in ('curl -s http://127.0.0.1:4040/api/tunnels ^| jq -r .tunnels[0].p
 echo ngroktunnel: %ngrokTunnel%
 echo  %ngrokTunnel%/.well-known/openid-configuration
 
-for /f "tokens=1* delims=]" %%a in ('find /n /v "" %sourceFile%') do (
+for /f "tokens=1* delims=]" %%a in ('find /n /v "" %targetFile%') do (
   echo %%b|findstr /rc:"\ *\"AuthorityUrl\".*\:\ \".*\"" >nul && (
     for /f "delims=:" %%c in ("%%b") do echo %%c: "%ngrokTunnel%",
     ) || echo/%%b
@@ -23,7 +23,7 @@ for /f "tokens=1* delims=]" %%a in ('find /n /v "" %sourceFile%') do (
 
 for %%I in (C:\TEMP_NGROK\temp.json) do for /f "delims=, tokens=* skip=1" %%x in (%%I) do echo %%x >> "%%I.new"
 
-move /Y "C:\TEMP_NGROK\temp.json.new" %sourceFile% > nul
+move /Y "C:\TEMP_NGROK\temp.json.new" %targetFile% > nul
 
 del C:\TEMP_NGROK\temp.json
 rmdir /s /q "C:\TEMP_NGROK\"
