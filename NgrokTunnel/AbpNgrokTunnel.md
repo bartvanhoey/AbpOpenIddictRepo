@@ -30,11 +30,11 @@ Although the script is written for an **ABP Framework project** with **.NET MAUI
 
     Run the following command to add your authtoken to your ngrok.yml file:
 
-    ```bash
+```bash
 
      ngrok authtoken your-authtoken
 
-    ```
+ ```
 
 ### Install jq
 
