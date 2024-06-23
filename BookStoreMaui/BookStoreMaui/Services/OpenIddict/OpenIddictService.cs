@@ -1,6 +1,7 @@
 ﻿using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
+using static BookStoreMaui.Services.OpenIddict.OidcClientCreator;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
 
 namespace BookStoreMaui.Services.OpenIddict
@@ -12,7 +13,7 @@ namespace BookStoreMaui.Services.OpenIddict
         {
             try
             {
-                var oidcClient = CreateOidcClient();
+                var oidcClient = CreateOidcClient(configuration);
                 var login = await oidcClient.LoginAsync(new LoginRequest());
                 
                 if (login.IsNotAuthenticated()) return false;
@@ -29,7 +30,7 @@ namespace BookStoreMaui.Services.OpenIddict
 
         async Task IOpenIddictService.LogoutAsync()
         {
-            var oidcClient = CreateOidcClient();
+            var oidcClient = CreateOidcClient(configuration);
             try
             {
                 var result = await oidcClient.LogoutAsync(new LogoutRequest
@@ -58,27 +59,27 @@ namespace BookStoreMaui.Services.OpenIddict
         }
 
 
-        private OidcClient CreateOidcClient()
-        {
-            var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
-            if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
-
-            var oidcClientOptions = new OidcClientOptions
-            {
-                Authority = oIddict.AuthorityUrl,
-                ClientId = oIddict.ClientId,
-                Scope = oIddict.Scope,
-                RedirectUri = oIddict.RedirectUri,
-                ClientSecret = oIddict.ClientSecret,
-                PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
-                Browser = new WebAuthenticatorBrowser(),
-            };
-            var client = new OidcClient(oidcClientOptions);
-
-#if DEBUG
-            client.Options.HttpClientFactory = HttpClientResolver.GetHttpClientByPlatform;
-#endif
-            return client;
-        }
+//         private OidcClient CreateOidcClient()
+//         {
+//             var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
+//             if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
+//
+//             var oidcClientOptions = new OidcClientOptions
+//             {
+//                 Authority = oIddict.AuthorityUrl,
+//                 ClientId = oIddict.ClientId,
+//                 Scope = oIddict.Scope,
+//                 RedirectUri = oIddict.RedirectUri,
+//                 ClientSecret = oIddict.ClientSecret,
+//                 PostLogoutRedirectUri = oIddict.PostLogoutRedirectUri,
+//                 Browser = new WebAuthenticatorBrowser(),
+//             };
+//             var client = new OidcClient(oidcClientOptions);
+//
+// #if DEBUG
+//             client.Options.HttpClientFactory = HttpClientResolver.GetHttpClientByPlatform;
+// #endif
+//             return client;
+//         }
     }
 }
