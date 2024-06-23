@@ -1,4 +1,5 @@
 @echo off
+
 set sourceFile="C:\Data\ABP\AbpMaui\BookStoreMaui\BookStoreMaui\appsettings.json"
 set portNumber=44336
 
@@ -9,7 +10,6 @@ start ngrok.exe http https://localhost:%portNumber%/
 timeout 5 > NUL
 
 if not exist "C:\TEMP_NGROK\" mkdir "C:\TEMP_NGROK\"
-
 
 for /F %%I in ('curl -s http://127.0.0.1:4040/api/tunnels ^| jq -r .tunnels[0].public_url') do set ngrokTunnel=%%I
 echo ngroktunnel: %ngrokTunnel%
