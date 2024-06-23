@@ -1,9 +1,8 @@
-using IdentityModel.Client;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
 using static System.ArgumentNullException;
 
-namespace BookStoreMaui.Services.OpenIddict;
+namespace BookStoreMaui.Services.OpenIddict.Infra;
 
 public static class OidcClientCreator
 {

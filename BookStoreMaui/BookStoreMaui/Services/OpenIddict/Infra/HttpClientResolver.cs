@@ -1,6 +1,6 @@
 using IdentityModel.OidcClient;
 
-namespace BookStoreMaui.Services.OpenIddict;
+namespace BookStoreMaui.Services.OpenIddict.Infra;
 
 public static class HttpClientResolver
 {

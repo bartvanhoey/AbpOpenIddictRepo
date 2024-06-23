@@ -2,7 +2,7 @@
 using static System.String;
 using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
 
-namespace BookStoreMaui.Services.OpenIddict
+namespace BookStoreMaui.Services.OpenIddict.Infra
 {
     internal class WebAuthenticatorBrowser(string? callbackUrl = null) : IBrowser
     {

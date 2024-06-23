@@ -1,4 +1,4 @@
-﻿namespace BookStoreMaui.Services.OpenIddict;
+﻿namespace BookStoreMaui.Services.OpenIddict.Infra;
 
 public class OpenIddictSettings
 {

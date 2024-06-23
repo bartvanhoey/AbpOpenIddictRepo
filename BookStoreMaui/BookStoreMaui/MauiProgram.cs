@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BookStoreMaui.Pages;
 using BookStoreMaui.Services.OpenIddict;
+using BookStoreMaui.Services.OpenIddict.Infra;
 using BookStoreMaui.Services.SecureStorage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;

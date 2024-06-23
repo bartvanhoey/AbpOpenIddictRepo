@@ -1,4 +1,5 @@
-﻿using BookStoreMaui.Services.SecureStorage;
+﻿using BookStoreMaui.Services.OpenIddict.Infra;
+using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.OidcClient;
 using Microsoft.Extensions.Configuration;
 using DisplayMode = IdentityModel.OidcClient.Browser.DisplayMode;
@@ -27,7 +28,7 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
         }
     }
 
-    async Task IOpenIddictService.LogoutAsync()
+   public async Task LogoutAsync()
     {
         var oidcClient = configuration.GetOidcSettings().CreateClient();
         try
