@@ -1,13 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.Extensions.Configuration;
 
-namespace BookStoreMaui.Services.OpenIddict.Infra;
-
-public static class ConfigurationExtensions
+namespace BookStoreMaui.Services.OpenIddict.Infra
 {
-    public static OpenIddictSettings GetOidcSettings(this IConfiguration configuration)
+    public static class ConfigurationExtensions
     {
-        var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
-        if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
-        return oIddict;
+        public static OpenIddictSettings GetOidcSettings(this IConfiguration configuration)
+        {
+            var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
+            if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
+            return oIddict;
+        }
     }
 }
