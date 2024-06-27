@@ -204,13 +204,6 @@ Copy the **lower forwarding url** as you will need it for use in the .NET MAUI a
     </ItemGroup>
 ```
 
-### Add the appsettings.json file to the configuration
-
-```csharp
-     var assembly = typeof(App).GetTypeInfo().Assembly;
-        builder.Configuration.AddJsonFile(new EmbeddedFileProvider(assembly), "appsettings.json", optional: false,false);
-```
-
 ### Add a StorageServiceBase class to the Services/SecureStorage folder
 
 ```csharp
@@ -387,64 +380,6 @@ public class OpenIddictSettings
     public string? PostLogoutRedirectUri { get; set; }
 }
 ```
-
-### Add a WebAuthenticatorBrowser class to the Services/OpenIddict folder
-
-```csharp
-
-using IdentityModel.OidcClient.Browser;
-using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
-
-namespace BookStoreMaui.Services.OpenIddict
-{
-    internal class WebAuthenticatorBrowser(string? callbackUrl = null) : IBrowser
-    {
-        private readonly string _callbackUrl = callbackUrl ?? "";
-
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options,
-            CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var callbackUrl = string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
-
-                var authResult =
-                    await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
-                var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
-                return new BrowserResult
-                {
-                    Response = authorizeResponse
-                };
-            }
-            catch (TaskCanceledException ex)
-            {
-                return new BrowserResult
-                {
-                    ResultType = BrowserResultType.UnknownError,
-                    Error = ex.ToString()
-                };
-            }
-            catch (Exception ex)
-            {
-                return new BrowserResult
-                {
-                    ResultType = BrowserResultType.UnknownError,
-                    Error = ex.ToString()
-                };
-            }
-        }
-
-        private static string ToRawIdentityUrl(string redirectUrl, WebAuthenticatorResult result)
-        {
-            var parameters = result.Properties.Select(pair => $"{pair.Key}={pair.Value}");
-            var values = string.Join("&", parameters);
-            return $"{redirectUrl}#{values}";
-        }
-    }
-}
-
-```
-
 ### Add an IOpenIddictService interface to the Services/OpenIddict folder
 
 ```csharp
@@ -519,6 +454,63 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
 }
 ```
 
+### Add a WebAuthenticatorBrowser class to the Services/OpenIddict/Infra folder
+
+```csharp
+
+using IdentityModel.OidcClient.Browser;
+using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
+
+namespace BookStoreMaui.Services.OpenIddict
+{
+    internal class WebAuthenticatorBrowser(string? callbackUrl = null) : IBrowser
+    {
+        private readonly string _callbackUrl = callbackUrl ?? "";
+
+        public async Task<BrowserResult> InvokeAsync(BrowserOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var callbackUrl = string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
+
+                var authResult =
+                    await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
+                var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
+                return new BrowserResult
+                {
+                    Response = authorizeResponse
+                };
+            }
+            catch (TaskCanceledException ex)
+            {
+                return new BrowserResult
+                {
+                    ResultType = BrowserResultType.UnknownError,
+                    Error = ex.ToString()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BrowserResult
+                {
+                    ResultType = BrowserResultType.UnknownError,
+                    Error = ex.ToString()
+                };
+            }
+        }
+
+        private static string ToRawIdentityUrl(string redirectUrl, WebAuthenticatorResult result)
+        {
+            var parameters = result.Properties.Select(pair => $"{pair.Key}={pair.Value}");
+            var values = string.Join("&", parameters);
+            return $"{redirectUrl}#{values}";
+        }
+    }
+}
+
+```
+
 ### Add an OidcClientCreator class to the Services/OpenIddict/Infra folder
 
 ```csharp
@@ -590,6 +582,10 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
         }
     }
 ```
+
+### Cop/paste infrastructure files into the Services/OpenIddict/Infra folder
+
+Copy **ConfigurationExtensions.cs**, **LoginResultExtensions.cs** and **AccessTokenValidator.cs** from the GitHub source code into the **Services/OpenIddict/Infra** folder.
 
 ### Copy/paste the Views (+ code-behind pages) and ViewModels from the source code
 

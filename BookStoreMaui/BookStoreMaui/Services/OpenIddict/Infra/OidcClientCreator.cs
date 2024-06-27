@@ -29,10 +29,5 @@ public static class OidcClientCreator
 
     }
 
-    public static OpenIddictSettings GetOidcSettings(this IConfiguration configuration)
-    {
-        var oIddict = configuration.GetSection(nameof(OpenIddictSettings)).Get<OpenIddictSettings>();
-        if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
-        return oIddict;
-    }
+  
 }
