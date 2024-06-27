@@ -12,7 +12,7 @@ public class AppDelegate : MauiUIApplicationDelegate
 {
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     
-    private const string iOsRedirectUri = "boostor://";
+    private const string iOsRedirectUri = "boostore://";
     
     public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
     {

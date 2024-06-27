@@ -380,6 +380,7 @@ public class OpenIddictSettings
     public string? PostLogoutRedirectUri { get; set; }
 }
 ```
+
 ### Add an IOpenIddictService interface to the Services/OpenIddict folder
 
 ```csharp
@@ -472,10 +473,15 @@ namespace BookStoreMaui.Services.OpenIddict
         {
             try
             {
-                var callbackUrl = string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl;
+                 var authenticatorOptions = new WebAuthenticatorOptions
+                {
+                    Url = new Uri(options.StartUrl),
+                    CallbackUrl = new Uri(string.IsNullOrEmpty(_callbackUrl) ? options.EndUrl : _callbackUrl),
+                    PrefersEphemeralWebBrowserSession = true
+                };
 
-                var authResult =
-                    await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(callbackUrl));
+                var authResult = await WebAuthenticator.Default.AuthenticateAsync(authenticatorOptions);
+                
                 var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
                 return new BrowserResult
                 {
@@ -587,11 +593,11 @@ namespace BookStoreMaui.Services.OpenIddict
 
 Copy **ConfigurationExtensions.cs**, **LoginResultExtensions.cs** and **AccessTokenValidator.cs** from the GitHub source code into the **Services/OpenIddict/Infra** folder.
 
-### Copy/paste the Views (+ code-behind pages) and ViewModels from the source code
+### Copy/paste the Views (+ code-behind pages) and ViewModels into the Pages folder
 
-- LoginPage.xaml/LoginPage.xaml.cs/LoginViewModel.cs
-- LogoutPage.xaml/LogoutPage.xaml.cs/LogoutViewModel.cs
-- HomePage.xaml/HomePage.xaml.cs
+Copy the **LoginPage.xaml**, **HomePage.xaml** and **LogoutPage.xaml** files from the GitHub source code into the **Pages** folder.
+
+Copy the **LoginViewModel.cs** and **LogoutViewModel.cs** files from the GitHub source code into the **Pages** folder.
 
 ### Replace the content of the AppShell page
 
