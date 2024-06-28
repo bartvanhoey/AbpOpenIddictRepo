@@ -19,6 +19,8 @@ public class OpenIddictService(IConfiguration configuration, ISecureStorageServi
                 
             await storageService.SetOpenIddictTokensAsync(login);
             return true;
+            
+            // TODO catch System.InvalidOperationException: Error loading discovery document: Error connecting to /.well-known/openid-configuration: Connection refused
         }
         catch (Exception e)
         {

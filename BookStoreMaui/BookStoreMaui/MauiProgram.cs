@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using BookStoreMaui.Functional;
 using BookStoreMaui.Pages;
+using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.OpenIddict;
 using BookStoreMaui.Services.OpenIddict.Infra;
 using BookStoreMaui.Services.SecureStorage;
@@ -43,16 +45,60 @@ public static class MauiProgram
         
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<LoginViewModel>();
-            
+        
         builder.Services.AddTransient<LogoutPage>();
         builder.Services.AddTransient<LogoutViewModel>();
+        
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<HomeViewModel>();
+
+        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto>>();
+        
+        builder.Services.AddTransient<IBookAppService, BookAppService>();
 
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
         return builder.Build();
+        
+        
     }
     
     
+}
+
+public class GetBookListDto
+{
+}
+
+public class UpdateBookDto
+{
+}
+
+public  class CreateBooDto
+{
+}
+
+public class BookDto
+{
+    public string? Name { get; set; }
+
+    public BookType Type { get; set; }
+
+    public DateTime PublishDate{ get; set;  }
+
+    public float Price { get; set; }
+}
+
+public enum BookType
+{
+    Undefined,
+    Adventure,
+    Biography,
+    Dystopia,
+    Fantastic,
+    Horror,
+    Science,
+    ScienceFiction,
+    Poetry
 }
