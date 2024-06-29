@@ -2,6 +2,7 @@
 using BookStoreMaui.Functional;
 using BookStoreMaui.Pages;
 using BookStoreMaui.Services.Http;
+using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.OpenIddict;
 using BookStoreMaui.Services.OpenIddict.Infra;
 using BookStoreMaui.Services.SecureStorage;
@@ -52,7 +53,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<HomeViewModel>();
 
-        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto>>();
+        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>>();
         
         builder.Services.AddTransient<IBookAppService, BookAppService>();
 
@@ -67,7 +68,7 @@ public static class MauiProgram
     
 }
 
-public class GetBookListDto
+public class GetBooksPagedRequestDto : PagedRequestDto
 {
 }
 

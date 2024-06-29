@@ -35,10 +35,10 @@ public interface IBookAppService
 
 public class BookAppService : IBookAppService
 {
-    private readonly IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto> _httpService;
+    private readonly IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto> _httpService;
     private readonly IConfiguration _configuration;
 
-    public BookAppService(IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBookListDto> httpService, IConfiguration configuration)
+    public BookAppService(IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto> httpService, IConfiguration configuration)
     {
         _httpService = httpService;
         _configuration = configuration;
@@ -48,7 +48,7 @@ public class BookAppService : IBookAppService
     {
         var authorityUrl = _configuration.GetOidcSettings().AuthorityUrl;
 
-        var listAsync = await _httpService.GetListAsync($"{authorityUrl}/api/app/book", new GetBookListDto());
+        var listAsync = await _httpService.GetListAsync($"{authorityUrl}/api/app/book", new GetBooksPagedRequestDto());
 
         return new List<BookDto>();
     }

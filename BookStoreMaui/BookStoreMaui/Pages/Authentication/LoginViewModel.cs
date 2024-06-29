@@ -1,7 +1,6 @@
 ﻿using BookStoreMaui.Services.OpenIddict;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using static Microsoft.Maui.Controls.Shell;
 
 namespace BookStoreMaui.Pages
 {
@@ -21,18 +20,18 @@ namespace BookStoreMaui.Pages
                 IsVisible = true;
                 if (await _openIddictService.IsUserLoggedInAsync())
                 {
-                    await Current.GoToAsync($"//{nameof(LoginPage)}", false);
-                    await Current.GoToAsync($"//{nameof(HomePage)}", false);
+                    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", false);
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}", false);
                 }
                 else
                 {
                     await _openIddictService.LogoutAsync();
-                    await Current.GoToAsync($"//{nameof(LoginPage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                 }
             }
             else
             {
-                await Current.GoToAsync($"//{nameof(LoginPage)}");
+                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                 IsVisible = true;
             }
         }

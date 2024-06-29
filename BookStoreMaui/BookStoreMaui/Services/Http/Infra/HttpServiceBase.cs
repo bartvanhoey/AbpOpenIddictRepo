@@ -1,7 +1,7 @@
 ﻿using BookStoreMaui.Services.SecureStorage;
 using IdentityModel.Client;
 
-namespace BookStoreMaui.Services.Http;
+namespace BookStoreMaui.Services.Http.Infra;
 
 public class HttpServiceBase<T, TC, TU, TG>
 {
@@ -20,12 +20,12 @@ public class HttpServiceBase<T, TC, TU, TG>
         return httpClient;
     }
 
-    protected static string ComposeUri(string uri, TG getListInputDto)
+    protected static string ComposeUri(string uri, TG getListRequestDto)
     {
-        if (getListInputDto is IPagedListDto pagedListDto)
-            return uri.Contains("?")
-                ? $"{uri}&skipCount={pagedListDto.SkipCount}&maxResultCount={pagedListDto.MaxResultCount}"
-                : $"{uri}?skipCount={pagedListDto.SkipCount}&maxResultCount={pagedListDto.MaxResultCount}";
+        if (getListRequestDto is IPagedRequestDto pagedRequestDto)
+            return uri.Contains('?')
+                ? $"{uri}&skipCount={pagedRequestDto.SkipCount}&maxResultCount={pagedRequestDto.MaxResultCount}"
+                : $"{uri}?skipCount={pagedRequestDto.SkipCount}&maxResultCount={pagedRequestDto.MaxResultCount}";
         return uri;
     }
     

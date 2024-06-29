@@ -1,5 +1,4 @@
-﻿
-using BookStoreMaui.Services.OpenIddict;
+﻿using BookStoreMaui.Services.OpenIddict;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

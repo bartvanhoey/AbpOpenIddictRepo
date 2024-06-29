@@ -83,6 +83,27 @@
 
     <ItemGroup>
       <Folder Include="Models\" />
+      <Folder Include="Pages\Authors\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiXaml Update="Pages\Authentication\LoginPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Pages\Authentication\LogoutPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Pages\Authentication\LoginPage.xaml.cs">
+        <DependentUpon>LoginPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Authentication\LogoutPage.xaml.cs">
+        <DependentUpon>LogoutPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>
