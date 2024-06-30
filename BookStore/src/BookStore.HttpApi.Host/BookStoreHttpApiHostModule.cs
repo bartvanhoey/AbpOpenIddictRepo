@@ -81,7 +81,7 @@ public class BookStoreHttpApiHostModule : AbpModule
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "BookStoreMaui"; // Replace with your actual audience
+                options.Audience = "BookStore"; // Replace with your actual audience
                 options.TokenValidationParameters.ValidIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<string[]>();
             });
 
