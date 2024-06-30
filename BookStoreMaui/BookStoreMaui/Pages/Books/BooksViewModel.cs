@@ -3,6 +3,7 @@ using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Http;
 using BookStoreMaui.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BookStoreMaui.Pages.Books;
 
@@ -21,4 +22,10 @@ public partial class BooksViewModel : ObservableObject
     
     public async Task OnAppearing() 
         => SourceItemDtos.AddRange(await _bookAppService.GetBooksAsync());
+    
+    [RelayCommand]
+    public void ShowDeletePopupCommand(BookDto bookDto)
+    {
+        // Show delete popup
+    }
 }
