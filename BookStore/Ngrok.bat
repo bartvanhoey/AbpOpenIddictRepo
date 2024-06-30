@@ -5,7 +5,7 @@ set portNumber=44336
 
 setlocal disabledelayedexpansion
 
-start ngrok.exe http https://localhost:%portNumber%/
+start ngrok.exe http --region eu https://localhost:%portNumber%/
 
 timeout 5 > NUL
 
