@@ -11,5 +11,7 @@ namespace BookStoreMaui.Services.OpenIddict.Infra
             if (oIddict == null) throw new ArgumentNullException(nameof(OpenIddictSettings));
             return oIddict;
         }
+        
+        public static string GetAuthUrl(this IConfiguration configuration) => configuration.GetOidcSettings().AuthorityUrl ?? string.Empty;
     }
 }

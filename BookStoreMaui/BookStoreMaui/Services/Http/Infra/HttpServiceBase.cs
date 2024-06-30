@@ -3,7 +3,7 @@ using IdentityModel.Client;
 
 namespace BookStoreMaui.Services.Http.Infra;
 
-public class HttpServiceBase<T, TC, TU, TG>
+public class HttpServiceBase<T, TC, TU, TG, TD>
 {
     public HttpServiceBase(ISecureStorageService secureStorageService)
     {

@@ -7,4 +7,5 @@ public interface IBookAppService
     // Task AddBookAsync(Book book);
     // Task UpdateBookAsync(Book book);
     // Task DeleteBookAsync(int id);
+    Task DeleteBookAsync(Guid bookDtoId);
 }

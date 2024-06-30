@@ -5,7 +5,7 @@ using FluentResults;
 
 namespace BookStoreMaui.Services.Http;
 
-public class HttpService<T, TC, TU, TL> : HttpServiceBase<T, TC, TU, TL>, IHttpService<T, TC, TU, TL>
+public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>, IHttpService<T, TC, TU, TL, TD>
     where T : class
     where TC : class
     where TU : class
@@ -47,5 +47,14 @@ public class HttpService<T, TC, TU, TL> : HttpServiceBase<T, TC, TU, TL>, IHttpS
     public Task<Result<T>> GetAsync(string uri)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task DeleteAsync(string uri, TD id)
+    {
+        var httpResponse = await (await GetHttpClientAsync()).Value.DeleteAsync($"{uri}/{id}" );
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new Exception("Failed to delete");
+        }
     }
 }

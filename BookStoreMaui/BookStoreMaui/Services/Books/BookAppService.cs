@@ -6,19 +6,24 @@ namespace BookStoreMaui.Services.Books;
 
 public class BookAppService : IBookAppService
 {
-    private readonly IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto> _httpService;
-    private readonly IConfiguration _configuration;
+    private readonly IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> _httpService;
+    private readonly IConfiguration _config;
 
-    public BookAppService(IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto> httpService, IConfiguration configuration)
+    public BookAppService(IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService, IConfiguration config)
     {
         _httpService = httpService;
-        _configuration = configuration;
+        _config = config;
     }
     
     public async Task<IEnumerable<BookDto>> GetBooksAsync()
     {
-        var authorityUrl = _configuration.GetOidcSettings().AuthorityUrl;
-        var result = await _httpService.GetListAsync($"{authorityUrl}/api/app/book", new GetBooksPagedRequestDto());
+        var result = await _httpService.GetListAsync($"{_config.GetAuthUrl()}/api/app/book", new GetBooksPagedRequestDto());
         return result.IsSuccess ? result.Value.Items : new List<BookDto>();
+    }
+
+    public async Task DeleteBookAsync(Guid bookDtoId)
+    {
+        await _httpService.DeleteAsync($"{_config.GetAuthUrl()}/api/app/book", bookDtoId);
+        // return result.IsSuccess ? result.Value.Items : new List<BookDto>();
     }
 }

@@ -61,7 +61,7 @@ public static class MauiProgram
         builder.Services.AddTransient<BooksPage>();
         builder.Services.AddTransient<BooksViewModel>();
 
-        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>>();
+        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
         
         builder.Services.AddTransient<IBookAppService, BookAppService>();
 
@@ -90,6 +90,8 @@ public  class CreateBooDto
 
 public class BookDto
 {
+    public Guid Id { get; set; }
+    
     public string? Name { get; set; }
 
     public BookType Type { get; set; }

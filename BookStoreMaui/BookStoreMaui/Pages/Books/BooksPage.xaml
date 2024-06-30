@@ -8,7 +8,6 @@
              x:Class="BookStoreMaui.Pages.Books.BooksPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Books" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center" />
             <CollectionView ItemsSource="{Binding SourceItemDtos}" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -20,7 +19,7 @@
                                         BackgroundColor="Red"
                                         IsDestructive="True"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type books:BooksViewModel}}, 
-                                                    Path=ShowDeletePopupCommand}"
+                                                    Path=DeleteBookCommand}"
                                         CommandParameter="{Binding .}">
                                         <SwipeItem.IconImageSource>
                                             <FontImageSource Size="Small" FontFamily="FASolid"
@@ -30,6 +29,7 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <StackLayout Padding="10">
+                                <Label Text="{Binding Id}" FontAttributes="Bold" />
                                 <Label Text="{Binding Name}" FontAttributes="Bold" />
                                 <Label Text="{Binding PublishDate}" />
                                 <Label Text="{Binding Price}" />

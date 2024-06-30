@@ -24,8 +24,8 @@ public partial class BooksViewModel : ObservableObject
         => SourceItemDtos.AddRange(await _bookAppService.GetBooksAsync());
     
     [RelayCommand]
-    public void ShowDeletePopupCommand(BookDto bookDto)
+    private void DeleteBook(BookDto bookDto)
     {
-        // Show delete popup
+        _bookAppService.DeleteBookAsync(bookDto.Id);
     }
 }
