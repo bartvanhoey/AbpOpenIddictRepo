@@ -377,7 +377,13 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
     private bool HasSameRedirectUris(OpenIddictApplication existingClient, AbpApplicationDescriptor application)
     {
-        return existingClient.RedirectUris == JsonSerializer.Serialize(application.RedirectUris.Select(q => q.ToString().TrimEnd('/')));
+        string applicationRedirectUris = JsonSerializer.Serialize(application.RedirectUris.Select(q => q.ToString().TrimEnd('/')));
+
+        var configurationSection = _configuration.GetSection("OpenIddict:Applications");
+        var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
+        
+        if (existingClient.ClientId == mauiClientId) return true;
+        return existingClient.RedirectUris == applicationRedirectUris;
     }
 
     private bool HasSameScopes(OpenIddictApplication existingClient, AbpApplicationDescriptor application)
