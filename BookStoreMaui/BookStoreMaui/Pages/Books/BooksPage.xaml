@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Books" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center" />
-            <CollectionView ItemsSource="{Binding Books}" SelectionMode="Single">
+            <CollectionView ItemsSource="{Binding SourceItemDtos}" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Padding="10">

@@ -12,14 +12,9 @@ public partial class BooksPage : ContentPage
 
     public BooksPage(BooksViewModel booksViewModel)
     {
-        InitializeComponent();
         BindingContext = _vm = booksViewModel;
+        InitializeComponent();
     }
     
-    protected override void OnAppearing()
-    {
-     
-        _vm.OnAppearing();
-    }
-    
+    protected override async void OnAppearing() => await _vm.OnAppearing();
 }

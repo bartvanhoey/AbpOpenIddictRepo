@@ -53,6 +53,9 @@ public static class MauiProgram
         
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<HomeViewModel>();
+        
+        builder.Services.AddTransient<BooksPage>();
+        builder.Services.AddTransient<BooksViewModel>();
 
         builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto>>();
         
