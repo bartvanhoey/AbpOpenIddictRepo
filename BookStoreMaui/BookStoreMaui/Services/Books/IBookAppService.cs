@@ -1,4 +1,4 @@
-﻿namespace BookStoreMaui.Pages.Books;
+﻿namespace BookStoreMaui.Services.Books;
 
 public interface IBookAppService
 {

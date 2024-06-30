@@ -88,6 +88,8 @@
       <Folder Include="Miscellaneous\" />
       <Folder Include="Models\" />
       <Folder Include="Pages\Authors\" />
+      <Folder Include="Pages\Books\Add\" />
+      <Folder Include="Pages\Books\Edit\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -95,6 +97,9 @@
         <SubType>Designer</SubType>
       </MauiXaml>
       <MauiXaml Update="Pages\Authentication\LogoutPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Pages\Home\HomePage.xaml">
         <SubType>Designer</SubType>
       </MauiXaml>
     </ItemGroup>
@@ -106,6 +111,10 @@
       </Compile>
       <Compile Update="Pages\Authentication\LogoutPage.xaml.cs">
         <DependentUpon>LogoutPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Home\HomePage.xaml.cs">
+        <DependentUpon>HomePage.xaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>

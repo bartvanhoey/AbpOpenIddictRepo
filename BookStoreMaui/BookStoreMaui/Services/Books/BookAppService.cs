@@ -2,7 +2,7 @@
 using BookStoreMaui.Services.OpenIddict.Infra;
 using Microsoft.Extensions.Configuration;
 
-namespace BookStoreMaui.Pages.Books;
+namespace BookStoreMaui.Services.Books;
 
 public class BookAppService : IBookAppService
 {
