@@ -1,4 +1,6 @@
-﻿using BookStoreMaui.Services.Http;
+﻿using System.Collections.ObjectModel;
+using BookStoreMaui.Services.Http;
+using BookStoreMaui.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BookStoreMaui.Pages.Books;
@@ -7,7 +9,7 @@ public partial class BooksViewModel : ObservableObject
 {
     private readonly IBookAppService _bookAppService;
 
-    
+    public ObservableRangeCollection<BookDto> SourceItemDtos { get; set; } = new();
     
     public BooksViewModel(IBookAppService bookAppService)
     {
@@ -16,8 +18,6 @@ public partial class BooksViewModel : ObservableObject
     
         
     
-    public void OnAppearing()
-    {
-        var booksAsync = _bookAppService.GetBooksAsync();
-    }
+    public async Task OnAppearing() 
+        => SourceItemDtos.AddRange(await _bookAppService.GetBooksAsync());
 }

@@ -19,6 +19,9 @@
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AndroidPackageFormat>aab</AndroidPackageFormat>
+        <AndroidMinimumSdkVersion>21</AndroidMinimumSdkVersion> 
+        <AndroidTargetSdkVersion>33</AndroidTargetSdkVersion> 
 
         <!-- Display name -->
         <ApplicationTitle>BookStoreMaui</ApplicationTitle>
@@ -82,6 +85,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Miscellaneous\" />
       <Folder Include="Models\" />
       <Folder Include="Pages\Authors\" />
     </ItemGroup>

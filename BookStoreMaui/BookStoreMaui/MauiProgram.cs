@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BookStoreMaui.Functional;
 using BookStoreMaui.Pages;
+using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.OpenIddict;

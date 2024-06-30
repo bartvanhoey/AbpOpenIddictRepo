@@ -4,10 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:BookStoreMaui.Pages"
+    xmlns:books="clr-namespace:BookStoreMaui.Pages.Books"
     Title="BookStoreMaui">
 
     <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}" FlyoutItemIsVisible="False" Route="LoginPage" />
     <ShellContent Title="Home" ContentTemplate="{DataTemplate pages:HomePage}" Route="HomePage" />
     <ShellContent Title="Logout" ContentTemplate="{DataTemplate pages:LogoutPage}" FlyoutItemIsVisible="True" Route="LogoutPage" />
+    <ShellContent Title="Books" ContentTemplate="{DataTemplate books:BooksPage}" FlyoutItemIsVisible="True" Route="BooksPage" />
 
 </Shell>

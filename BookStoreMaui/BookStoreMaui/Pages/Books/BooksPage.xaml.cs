@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BookStoreMaui.Pages.Books;
 
-public partial class Books : ContentPage
+public partial class BooksPage : ContentPage
 {
     private readonly BooksViewModel _vm;
 
-    public Books(BooksViewModel booksViewModel)
+    public BooksPage(BooksViewModel booksViewModel)
     {
         InitializeComponent();
         BindingContext = _vm = booksViewModel;
