@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
-using BookStoreMaui.Functional;
 using BookStoreMaui.Pages;
 using BookStoreMaui.Pages.Books;
+using BookStoreMaui.Pages.Books.Add;
 using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.Http.Infra;
+using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Services.OpenIddict;
 using BookStoreMaui.Services.OpenIddict.Infra;
 using BookStoreMaui.Services.SecureStorage;
@@ -37,7 +38,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("fa-solid-900.ttf", "FASolid");
                 fonts.AddFont("fa-regular-400.ttf", "FARegular");
-                fonts.AddFont("fa-solid-900.ttf", "FASolid");
+                fonts.AddFont("fa-brands-400.ttf", "FABrands");
             });
     
         // Add the appsettings.json file to the configuration
@@ -60,10 +61,16 @@ public static class MauiProgram
         
         builder.Services.AddTransient<BooksPage>();
         builder.Services.AddTransient<BooksViewModel>();
+        
+        builder.Services.AddTransient<AddBookPage>();
+        builder.Services.AddTransient<AddBookViewModel>();
 
         builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
         
         builder.Services.AddTransient<IBookAppService, BookAppService>();
+        
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -1,31 +1,32 @@
-﻿using System.Collections.ObjectModel;
-using BookStoreMaui.Services.Books;
-using BookStoreMaui.Services.Http;
+﻿using BookStoreMaui.Services.Books;
+using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace BookStoreMaui.Pages.Books;
 
-public partial class BooksViewModel : ObservableObject
+public partial class BooksViewModel(IBookAppService bookAppService, INavigationService navigate) : ObservableObject
 {
-    private readonly IBookAppService _bookAppService;
-
+    // ReSharper disable once MemberCanBePrivate.Global
     public ObservableRangeCollection<BookDto> SourceItemDtos { get; set; } = new();
-    
-    public BooksViewModel(IBookAppService bookAppService)
+
+    public async Task OnAppearing() => await LoadBooksAsync();
+
+    [RelayCommand]
+    private async Task DeleteBook(BookDto bookDto)
     {
-        _bookAppService = bookAppService;
+        await bookAppService.DeleteBookAsync(bookDto.Id);
+        await LoadBooksAsync();
     }
     
-        
-    
-    public async Task OnAppearing() 
-        => SourceItemDtos.AddRange(await _bookAppService.GetBooksAsync());
-    
     [RelayCommand]
-    private void DeleteBook(BookDto bookDto)
+    private async Task GoToAddBookPage() => await navigate.ToAddBookPage();
+
+
+    private async Task LoadBooksAsync()
     {
-        _bookAppService.DeleteBookAsync(bookDto.Id);
+        SourceItemDtos.Clear();
+        SourceItemDtos.AddRange(await bookAppService.GetBooksAsync());
     }
 }

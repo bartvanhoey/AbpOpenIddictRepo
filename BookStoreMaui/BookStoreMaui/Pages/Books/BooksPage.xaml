@@ -6,38 +6,46 @@
              xmlns:books="clr-namespace:BookStoreMaui.Pages.Books"
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="BookStoreMaui.Pages.Books.BooksPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <CollectionView ItemsSource="{Binding SourceItemDtos}" SelectionMode="Single">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <SwipeView androidSpecific:SwipeView.SwipeTransitionMode="Drag">
 
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem
-                                        BackgroundColor="Red"
-                                        IsDestructive="True"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type books:BooksViewModel}}, 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding GoToAddBookPageCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Size="40" Color="Black" Glyph="{x:Static fontAwesome:FAIcons.Plus}" FontFamily="FASolid" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
+    <StackLayout>
+        <CollectionView ItemsSource="{Binding SourceItemDtos}" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView androidSpecific:SwipeView.SwipeTransitionMode="Drag">
+
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem
+                                    BackgroundColor="Red"
+                                    IsDestructive="True"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type books:BooksViewModel}}, 
                                                     Path=DeleteBookCommand}"
-                                        CommandParameter="{Binding .}">
-                                        <SwipeItem.IconImageSource>
-                                            <FontImageSource Size="Small" FontFamily="FASolid"
-                                                             Glyph="{x:Static fontAwesome:FAIcons.TrashAlt}" />
-                                        </SwipeItem.IconImageSource>
-                                    </SwipeItem>
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            <StackLayout Padding="10">
-                                <Label Text="{Binding Id}" FontAttributes="Bold" />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                <Label Text="{Binding PublishDate}" />
-                                <Label Text="{Binding Price}" />
-                            </StackLayout>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </ContentPage.Content>
+                                    CommandParameter="{Binding .}">
+                                    <SwipeItem.IconImageSource>
+                                        <FontImageSource Size="Small" FontFamily="FASolid"
+                                                         Glyph="{x:Static fontAwesome:FAIcons.TrashAlt}" />
+                                    </SwipeItem.IconImageSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Id}" FontAttributes="Bold" />
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding PublishDate}" />
+                            <Label Text="{Binding Price}" />
+                        </StackLayout>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+
 </ContentPage>
