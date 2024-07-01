@@ -8,8 +8,14 @@ namespace BookStoreMaui.Pages.Books.Add;
 
 public partial class AddBookPage : ContentPage
 {
-    public AddBookPage()
+    public AddBookPage(AddBookViewModel addBookViewModel)
+    
     {
+        BindingContext = addBookViewModel;
         InitializeComponent();
+        Shell.SetBackButtonBehavior(this, new BackButtonBehavior()
+        {
+            TextOverride = "Back",
+        });
     }
 }

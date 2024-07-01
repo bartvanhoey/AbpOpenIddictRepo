@@ -1,4 +1,6 @@
-﻿using BookStoreMaui.Functional;
+﻿using System.Net.Http.Json;
+using System.Text;
+using BookStoreMaui.Functional;
 using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.SecureStorage;
 using FluentResults;
@@ -39,9 +41,31 @@ public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>
         throw new NotImplementedException();
     }
 
-    public Task<Result<ListResultDto<T>>> CreateAsync(string url, TC createInputDto)
+    public async Task<Result<ListResultDto<T>>> CreateAsync(string url, TC createInputDto)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            var createJson =createInputDto.ToJson();
+            var httpResponse = await (await GetHttpClientAsync())
+                .Value.PostAsync($"{url}", new StringContent(createJson, Encoding.UTF8, "application/json"));
+
+            httpResponse.EnsureSuccessStatusCode();
+            
+            var json = await httpResponse.Content.ReadAsStringAsync();
+            if (json == "[]" || json.IsNullOrWhiteSpace()) return Result.Ok(new ListResultDto<T>());
+
+            var items = json.ToType<List<T>>();
+            
+            return Result.Ok(new ListResultDto<T>(items));
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+            
+        }
+        return Result.Ok(new ListResultDto<T>());
+        
     }
 
     public Task<Result<T>> GetAsync(string uri)

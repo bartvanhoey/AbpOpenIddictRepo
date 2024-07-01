@@ -1,4 +1,4 @@
-﻿namespace BookStoreMaui.Pages;
+﻿namespace BookStoreMaui.Pages.Home;
 
 public partial class HomePage : ContentPage
 {
@@ -7,6 +7,7 @@ public partial class HomePage : ContentPage
     public HomePage(HomeViewModel homeViewModel)
     {
         BindingContext = _vm = homeViewModel;
+  
         InitializeComponent();
     }
 

@@ -2,6 +2,7 @@
 using BookStoreMaui.Pages;
 using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
+using BookStoreMaui.Pages.Home;
 using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.Http.Infra;
@@ -93,10 +94,33 @@ public class UpdateBookDto
 
 public  class CreateBooDto
 {
+    public CreateBooDto(string? name, DateTime publishDate, float price)
+    {
+        Name = name;
+        PublishDate = publishDate;
+        Price = price;
+    }
+
+    public float Price { get; set; }
+
+    public DateTime PublishDate { get; set; }
+
+    public string? Name { get; set; }
 }
 
 public class BookDto
 {
+    public BookDto()
+    {
+    }
+
+    public BookDto(string? name, DateTime publishDate, float price)
+    {
+        Name = name;
+        PublishDate = publishDate;
+        Price = price;
+    }
+
     public Guid Id { get; set; }
     
     public string? Name { get; set; }

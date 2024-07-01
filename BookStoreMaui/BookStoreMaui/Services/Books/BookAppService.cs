@@ -26,4 +26,9 @@ public class BookAppService : IBookAppService
         await _httpService.DeleteAsync($"{_config.GetAuthUrl()}/api/app/book", bookDtoId);
         // return result.IsSuccess ? result.Value.Items : new List<BookDto>();
     }
+
+    public async Task AddBookAsync(CreateBooDto bookDto)
+    {
+        await _httpService.CreateAsync($"{_config.GetAuthUrl()}/api/app/book", bookDto);
+    }
 }
