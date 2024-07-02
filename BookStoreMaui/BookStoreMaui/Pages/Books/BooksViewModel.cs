@@ -1,5 +1,6 @@
 ﻿using BookStoreMaui.Pages.Books.Edit;
 using BookStoreMaui.Services.Books;
+using BookStoreMaui.Services.Books.Dtos;
 using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;

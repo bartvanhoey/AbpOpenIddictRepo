@@ -84,7 +84,6 @@
       <Folder Include="Miscellaneous\" />
       <Folder Include="Models\" />
       <Folder Include="Pages\Authors\" />
-      <Folder Include="Services\Infra\" />
     </ItemGroup>
 
     <ItemGroup>

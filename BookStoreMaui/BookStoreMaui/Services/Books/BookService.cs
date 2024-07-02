@@ -1,4 +1,5 @@
-﻿using BookStoreMaui.Services.Http;
+﻿using BookStoreMaui.Services.Books.Dtos;
+using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.OpenIddict.Infra;
 using Microsoft.Extensions.Configuration;
 

@@ -1,13 +1,12 @@
 ﻿using System.Reflection;
-using BookStoreMaui.Models;
 using BookStoreMaui.Pages;
 using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
 using BookStoreMaui.Pages.Books.Edit;
 using BookStoreMaui.Pages.Home;
 using BookStoreMaui.Services.Books;
+using BookStoreMaui.Services.Books.Dtos;
 using BookStoreMaui.Services.Http;
-using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Services.OpenIddict;
 using BookStoreMaui.Services.OpenIddict.Infra;
@@ -93,66 +92,3 @@ public static class MauiProgram
     
     
 }
-
-public class GetBooksPagedRequestDto : PagedRequestDto
-{
-}
-
-public class UpdateBookDto
-{
-    public UpdateBookDto(Guid id, BookType type, float price, DateTime publishDate, string? name)
-    {
-        Id = id;
-        Type = type;
-        Price = price;
-        PublishDate = publishDate;
-        Name = name;
-    }
-
-    public Guid Id { get; set; }
-    public BookType Type { get; set; }
-    public float Price { get; set; }
-    public DateTime PublishDate { get; set; }
-    public string? Name { get; set; }
-}
-
-public  class CreateBooDto
-{
-    public CreateBooDto(string? name, BookType bookType, DateTime publishDate, float price)
-    {
-        Name = name;
-        PublishDate = publishDate;
-        Type = bookType;
-        Price = price;
-    }
-
-    public BookType Type { get; set; }
-    public float Price { get; set; }
-    public DateTime PublishDate { get; set; }
-    public string? Name { get; set; }
-}
-
-public class BookDto
-{
-    public BookDto()
-    {
-    }
-
-    public BookDto(string? name, DateTime publishDate, float price)
-    {
-        Name = name;
-        PublishDate = publishDate;
-        Price = price;
-    }
-
-    public Guid Id { get; set; }
-    
-    public string? Name { get; set; }
-
-    public BookType Type { get; set; }
-
-    public DateTime PublishDate{ get; set;  }
-
-    public float Price { get; set; }
-}
-

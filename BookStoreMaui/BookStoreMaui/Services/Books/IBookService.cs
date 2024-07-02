@@ -1,4 +1,6 @@
-﻿namespace BookStoreMaui.Services.Books;
+﻿using BookStoreMaui.Services.Books.Dtos;
+
+namespace BookStoreMaui.Services.Books;
 
 public interface IBookService
 {
