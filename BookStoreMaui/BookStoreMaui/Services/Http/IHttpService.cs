@@ -1,5 +1,4 @@
 ﻿using BookStoreMaui.Services.Http.Infra;
-using FluentResults;
 
 namespace BookStoreMaui.Services.Http;
 

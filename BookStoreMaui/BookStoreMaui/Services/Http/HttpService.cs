@@ -2,8 +2,7 @@
 using BookStoreMaui.Functional;
 using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.SecureStorage;
-using FluentResults;
-using static FluentResults.Result;
+
 
 namespace BookStoreMaui.Services.Http;
 
