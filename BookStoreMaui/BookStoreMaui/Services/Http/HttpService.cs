@@ -7,16 +7,13 @@ using static FluentResults.Result;
 
 namespace BookStoreMaui.Services.Http;
 
-public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>, IHttpService<T, TC, TU, TL, TD>
+public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService secureStorageService)
+    : HttpServiceBase<T, TC, TU, TL, TD>(secureStorageService), IHttpService<T, TC, TU, TL, TD>
     where T : class
     where TC : class
     where TU : class
     where TL : class
 {
-    public HttpService(ISecureStorageService secureStorageService) : base(secureStorageService)
-    {
-    }
-
     public async Task<Result<ListResultDto<T>>> GetListAsync(string uri, TL? getListRequestDto = default)
     {
         if (getListRequestDto == null) return new Result<ListResultDto<T>>();
