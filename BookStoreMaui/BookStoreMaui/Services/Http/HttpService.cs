@@ -1,9 +1,9 @@
-﻿using System.Net.Http.Json;
-using System.Text;
+﻿using System.Text;
 using BookStoreMaui.Functional;
 using BookStoreMaui.Services.Http.Infra;
 using BookStoreMaui.Services.SecureStorage;
 using FluentResults;
+using static FluentResults.Result;
 
 namespace BookStoreMaui.Services.Http;
 
@@ -24,7 +24,7 @@ public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>
         var httpResponse = await (await GetHttpClientAsync()).Value.GetAsync(ComposeUri(uri, getListRequestDto));
 
         var json = await httpResponse.Content.ReadAsStringAsync();
-        if (json == "[]" || json.IsNullOrWhiteSpace()) return Result.Ok(new ListResultDto<T>());
+        if (json == "[]" || json.IsNullOrWhiteSpace()) return Ok(new ListResultDto<T>());
         
         if (getListRequestDto is IPagedRequestDto)
         {
@@ -33,7 +33,7 @@ public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>
         }
 
         var listResultDto = new ListResultDto<T>(json.ToType<List<T>>());
-        return Result.Ok(listResultDto);
+        return Ok(listResultDto);
     }
 
     public Task<Result<ListResultDto<T>>> UpdateAsync(string uri, TU updateInputDto)
@@ -53,24 +53,29 @@ public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>
             httpResponse.EnsureSuccessStatusCode();
             
             var json = await httpResponse.Content.ReadAsStringAsync();
-            if (json == "[]" || json.IsNullOrWhiteSpace()) return Result.Ok(new ListResultDto<T>());
+            if (json == "[]" || json.IsNullOrWhiteSpace()) return Ok(new ListResultDto<T>());
 
+            if(json.StartsWith("{") && json.EndsWith("}"))
+                return Ok(new ListResultDto<T>(new List<T> { json.ToType<T>() }));
+            
             var items = json.ToType<List<T>>();
             
-            return Result.Ok(new ListResultDto<T>(items));
+            return Ok(new ListResultDto<T>(items));
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception);
             
         }
-        return Result.Ok(new ListResultDto<T>());
+        return Ok(new ListResultDto<T>());
         
     }
 
-    public Task<Result<T>> GetAsync(string uri)
+    public async Task<Result<T>> GetAsync(string uri)
     {
-        throw new NotImplementedException();
+        var httpResponse = await (await GetHttpClientAsync()).Value.GetAsync(uri);
+        var json = await httpResponse.Content.ReadAsStringAsync();
+        return json.IsNullOrWhiteSpace() ? Result.Fail<T>(new Error("json is null")) : Ok(json.ToType<T>()) ;
     }
 
     public async Task DeleteAsync(string uri, TD id)

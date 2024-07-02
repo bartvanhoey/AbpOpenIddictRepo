@@ -1,34 +1,34 @@
 ﻿using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.OpenIddict.Infra;
+using FluentResults;
 using Microsoft.Extensions.Configuration;
 
 namespace BookStoreMaui.Services.Books;
 
-public class BookAppService : IBookAppService
+public class BookAppService(
+    IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService,
+    IConfiguration config)
+    : IBookAppService
 {
-    private readonly IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> _httpService;
-    private readonly IConfiguration _config;
-
-    public BookAppService(IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService, IConfiguration config)
-    {
-        _httpService = httpService;
-        _config = config;
-    }
-    
     public async Task<IEnumerable<BookDto>> GetBooksAsync()
     {
-        var result = await _httpService.GetListAsync($"{_config.GetAuthUrl()}/api/app/book", new GetBooksPagedRequestDto());
+        var result = await httpService.GetListAsync($"{config.GetAuthUrl()}/api/app/book", new GetBooksPagedRequestDto());
         return result.IsSuccess ? result.Value.Items : new List<BookDto>();
     }
 
-    public async Task DeleteBookAsync(Guid bookDtoId)
+    public async Task DeleteBookAsync(Guid bookDtoId) 
+        => await httpService.DeleteAsync($"{config.GetAuthUrl()}/api/app/book", bookDtoId);
+
+    public async Task<BookDto?> CreateBookAsync(CreateBooDto bookDto)
     {
-        await _httpService.DeleteAsync($"{_config.GetAuthUrl()}/api/app/book", bookDtoId);
-        // return result.IsSuccess ? result.Value.Items : new List<BookDto>();
+        var result = await httpService.CreateAsync($"{config.GetAuthUrl()}/api/app/book", bookDto);
+        return result.IsSuccess ? result.Value.Items.FirstOrDefault() : null;
+                
     }
 
-    public async Task AddBookAsync(CreateBooDto bookDto)
+    public async Task<BookDto?> GetBookAsync(string bookId)
     {
-        await _httpService.CreateAsync($"{_config.GetAuthUrl()}/api/app/book", bookDto);
+        var result = await httpService.GetAsync($"{config.GetAuthUrl()}/api/app/book/{bookId}");
+        return result.IsSuccess ? result.Value : null;
     }
 }

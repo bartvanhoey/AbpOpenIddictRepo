@@ -2,10 +2,10 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:edit="clr-namespace:BookStoreMaui.Pages.Books.Edit"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:BookStoreMaui.Models"
-             x:Class="BookStoreMaui.Pages.Books.Add.AddBookPage" Title="Add Book">
-    
+             x:Class="BookStoreMaui.Pages.Books.Edit.EditBookPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:EnumToIntConverter x:Key="EnumToIntConverter" />
@@ -17,13 +17,13 @@
                             TextOverride="Back" />   
     </Shell.BackButtonBehavior>
  
-        <StackLayout Padding="10">
-            <Entry Placeholder="Name" Text="{Binding Name}" />
-            <Picker ItemsSource="{Binding BookTypes}" 
-                    SelectedIndex="{Binding SelectedBookType, 
+    <StackLayout Padding="10">
+        <Entry Placeholder="Name" Text="{Binding Book.Name}" />
+        <Picker ItemsSource="{Binding BookTypes}" 
+                SelectedIndex="{Binding Book.Type, 
                     Converter={StaticResource EnumToIntConverter}, ConverterParameter={x:Type models:BookType}}"/>
-            <DatePicker Date="{Binding PublishDate}" ></DatePicker>
-            <Entry Placeholder="Price" Text="{Binding Price}" />
-            <Button Text="Save" Command="{Binding SaveBookCommand}" />
-        </StackLayout>
+        <DatePicker Date="{Binding Book.PublishDate}" ></DatePicker>
+        <Entry Placeholder="Price" Text="{Binding Book.Price}" />
+        <Button Text="Save" Command="{Binding SaveBookCommand}" />
+    </StackLayout>
 </ContentPage>

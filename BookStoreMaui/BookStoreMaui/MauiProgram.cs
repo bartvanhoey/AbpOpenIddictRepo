@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using BookStoreMaui.Models;
 using BookStoreMaui.Pages;
 using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
+using BookStoreMaui.Pages.Books.Edit;
 using BookStoreMaui.Pages.Home;
 using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Http;
@@ -10,6 +12,7 @@ using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Services.OpenIddict;
 using BookStoreMaui.Services.OpenIddict.Infra;
 using BookStoreMaui.Services.SecureStorage;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
@@ -33,6 +36,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -44,6 +48,8 @@ public static class MauiProgram
     
         // Add the appsettings.json file to the configuration
         var assembly = typeof(App).GetTypeInfo().Assembly;
+        
+        
         builder.Configuration.AddJsonFile(new EmbeddedFileProvider(assembly), "appsettings.json", optional: false,false);
 
         builder.Services.AddTransient<WebAuthenticatorBrowser>();
@@ -65,6 +71,9 @@ public static class MauiProgram
         
         builder.Services.AddTransient<AddBookPage>();
         builder.Services.AddTransient<AddBookViewModel>();
+        
+        builder.Services.AddTransient<EditBookPage>();
+        builder.Services.AddTransient<EditBookViewModel>();
 
         builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>, HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
         
@@ -94,13 +103,16 @@ public class UpdateBookDto
 
 public  class CreateBooDto
 {
-    public CreateBooDto(string? name, DateTime publishDate, float price)
+    public CreateBooDto(string? name, BookType bookType, DateTime publishDate, float price)
     {
         Name = name;
         PublishDate = publishDate;
+        Type = bookType;
         Price = price;
     }
 
+    public BookType Type { get; set; }
+    
     public float Price { get; set; }
 
     public DateTime PublishDate { get; set; }
@@ -132,15 +144,3 @@ public class BookDto
     public float Price { get; set; }
 }
 
-public enum BookType
-{
-    Undefined,
-    Adventure,
-    Biography,
-    Dystopia,
-    Fantastic,
-    Horror,
-    Science,
-    ScienceFiction,
-    Poetry
-}

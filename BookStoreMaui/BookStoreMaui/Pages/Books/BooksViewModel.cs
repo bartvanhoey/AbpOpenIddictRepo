@@ -1,4 +1,5 @@
-﻿using BookStoreMaui.Services.Books;
+﻿using BookStoreMaui.Pages.Books.Edit;
+using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Navigation;
 using BookStoreMaui.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,6 +21,10 @@ public partial class BooksViewModel(IBookAppService bookAppService, INavigationS
         await LoadBooksAsync();
     }
     
+    [RelayCommand]
+    private async Task EditBook(BookDto bookDto) 
+        => await Shell.Current.GoToAsync($"{nameof(EditBookPage)}?BookId={bookDto.Id }");
+
     [RelayCommand]
     private async Task GoToAddBookPage() => await navigate.ToAddBookPage();
 

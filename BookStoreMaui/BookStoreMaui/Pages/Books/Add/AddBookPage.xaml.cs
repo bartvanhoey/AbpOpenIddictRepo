@@ -13,9 +13,9 @@ public partial class AddBookPage : ContentPage
     {
         BindingContext = addBookViewModel;
         InitializeComponent();
-        Shell.SetBackButtonBehavior(this, new BackButtonBehavior()
-        {
-            TextOverride = "Back",
-        });
+        // Shell.SetBackButtonBehavior(this, new BackButtonBehavior()
+        // {
+        //     TextOverride = "Back",
+        // });
     }
 }

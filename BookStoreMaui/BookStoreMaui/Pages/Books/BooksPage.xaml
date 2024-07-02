@@ -20,7 +20,6 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView androidSpecific:SwipeView.SwipeTransitionMode="Drag">
-
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem
@@ -36,6 +35,22 @@
                                 </SwipeItem>
                             </SwipeItems>
                         </SwipeView.RightItems>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem
+                                    BackgroundColor="Orange"
+                                    IsDestructive="True"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type books:BooksViewModel}}, 
+                                                    Path=EditBookCommand}"
+                                    CommandParameter="{Binding .}">
+                                    <SwipeItem.IconImageSource>
+                                        <FontImageSource Size="Small" FontFamily="FASolid"
+                                                         Glyph="{x:Static fontAwesome:FAIcons.Pencil}" />
+                                    </SwipeItem.IconImageSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+
                         <StackLayout Padding="10">
                             <Label Text="{Binding Id}" FontAttributes="Bold" />
                             <Label Text="{Binding Name}" FontAttributes="Bold" />
