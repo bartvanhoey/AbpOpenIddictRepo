@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace BookStoreMaui.Pages.Books;
 
-public partial class BooksViewModel(IBookAppService bookAppService, INavigationService navigate) : ObservableObject
+public partial class BooksViewModel(IBookService bookService, INavigationService navigate) : ObservableObject
 {
     // ReSharper disable once MemberCanBePrivate.Global
     public ObservableRangeCollection<BookDto> SourceItemDtos { get; set; } = new();
@@ -17,7 +17,7 @@ public partial class BooksViewModel(IBookAppService bookAppService, INavigationS
     [RelayCommand]
     private async Task DeleteBook(BookDto bookDto)
     {
-        await bookAppService.DeleteBookAsync(bookDto.Id);
+        await bookService.DeleteBookAsync(bookDto.Id);
         await LoadBooksAsync();
     }
     
@@ -32,6 +32,6 @@ public partial class BooksViewModel(IBookAppService bookAppService, INavigationS
     private async Task LoadBooksAsync()
     {
         SourceItemDtos.Clear();
-        SourceItemDtos.AddRange(await bookAppService.GetBooksAsync());
+        SourceItemDtos.AddRange(await bookService.GetBooksAsync());
     }
 }

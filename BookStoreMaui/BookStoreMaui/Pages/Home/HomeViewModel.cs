@@ -6,11 +6,11 @@ namespace BookStoreMaui.Pages;
 
 public partial class HomeViewModel : ObservableObject
 {
-    private readonly IBookAppService _bookAppService;
+    private readonly IBookService _bookService;
 
-    public HomeViewModel(IBookAppService bookAppService)
+    public HomeViewModel(IBookService bookService)
     {
-        _bookAppService = bookAppService;
+        _bookService = bookService;
     }
     
         
@@ -19,6 +19,6 @@ public partial class HomeViewModel : ObservableObject
     
     public async Task OnAppearing()
     {
-        var booksAsync = await _bookAppService.GetBooksAsync();
+        var booksAsync = await _bookService.GetBooksAsync();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace BookStoreMaui.Services.Books;
 
-public interface IBookAppService
+public interface IBookService
 {
     Task<IEnumerable<BookDto>> GetBooksAsync();
     Task<BookDto?> UpdateBookAsync(UpdateBookDto book);

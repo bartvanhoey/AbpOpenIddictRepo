@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace BookStoreMaui.Pages.Books.Edit;
 
 [QueryProperty(nameof(BookId), nameof(BookId))]
-public partial class EditBookViewModel(IBookAppService bookAppService, INavigationService navigate) : ObservableObject
+public partial class EditBookViewModel(IBookService bookService, INavigationService navigate) : ObservableObject
 {
     [ObservableProperty] private string? _bookId;
 
@@ -17,14 +17,14 @@ public partial class EditBookViewModel(IBookAppService bookAppService, INavigati
 
     public async Task OnAppearing()
     {
-        if (BookId != null) Book = await bookAppService.GetBookAsync(BookId);
+        if (BookId != null) Book = await bookService.GetBookAsync(BookId);
     }
 
     [RelayCommand]
     private async Task SaveBook()
     {
         if (Book == null) return;
-        await bookAppService.UpdateBookAsync(new UpdateBookDto(Book.Id, Book.Type, Book.Price, Book.PublishDate,
+        await bookService.UpdateBookAsync(new UpdateBookDto(Book.Id, Book.Type, Book.Price, Book.PublishDate,
             Book.Name));
         await navigate.ToBooksPage();
     }

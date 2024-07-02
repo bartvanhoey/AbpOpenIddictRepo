@@ -13,5 +13,7 @@ namespace BookStoreMaui.Services.OpenIddict.Infra
         }
         
         public static string GetAuthUrl(this IConfiguration configuration) => configuration.GetOidcSettings().AuthorityUrl ?? string.Empty;
+        public static string GetBookApiUrl(this IConfiguration configuration) 
+            => configuration.GetOidcSettings().AuthorityUrl != null ? $"{configuration.GetOidcSettings().AuthorityUrl}/api/app/book" : string.Empty;
     }
 }

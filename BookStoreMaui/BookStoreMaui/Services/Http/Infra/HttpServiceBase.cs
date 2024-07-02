@@ -3,14 +3,9 @@ using IdentityModel.Client;
 
 namespace BookStoreMaui.Services.Http.Infra;
 
-public class HttpServiceBase<T, TC, TU, TG, TD>
+public class HttpServiceBase<T, TC, TU, TG, TD>(ISecureStorageService secureStorageService)
 {
-    public HttpServiceBase(ISecureStorageService secureStorageService)
-    {
-        StorageService = secureStorageService;
-    }   
-
-    private ISecureStorageService StorageService { get; set; }
+    private ISecureStorageService StorageService { get; set; } = secureStorageService;
 
     protected async Task<Lazy<HttpClient>> GetHttpClientAsync()
     {
