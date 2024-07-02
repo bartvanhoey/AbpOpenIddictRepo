@@ -1,3 +1,4 @@
+using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
 using BookStoreMaui.Pages.Books.Edit;
 
@@ -8,7 +9,8 @@ public class NavigationService(IServiceProvider services) : INavigationService
     private INavigation Navigation => Application.Current?.MainPage?.Navigation ?? throw new Exception();
 
     public async Task ToAddBookPage() => await NavigateToPage<AddBookPage>();
-    
+    public async Task ToBooksPage() => await NavigateToPage<BooksPage>();
+
     private Task NavigateToPage<T>() where T : Page
     {
         var page = ResolvePage<T>();

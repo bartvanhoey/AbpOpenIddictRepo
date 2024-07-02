@@ -36,22 +36,38 @@ public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<T, TC, TU, TL, TD>
         return Ok(listResultDto);
     }
 
-    public Task<Result<ListResultDto<T>>> UpdateAsync(string uri, TU updateInputDto)
+    public async Task<Result<ListResultDto<T>>> UpdateAsync(string uri, TU updateInputDto)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var httpResponse = await (await GetHttpClientAsync())
+                .Value.PutAsync($"{uri}", new StringContent(updateInputDto.ToJson(), Encoding.UTF8, "application/json"));
+
+            var json = await httpResponse.Content.ReadAsStringAsync();
+            if (json == "[]" || json.IsNullOrWhiteSpace()) return Ok(new ListResultDto<T>());
+
+            if(json.StartsWith("{") && json.EndsWith("}"))
+                return Ok(new ListResultDto<T>(new List<T> { json.ToType<T>() }));
+            
+            var items = json.ToType<List<T>>();
+            
+            return Ok(new ListResultDto<T>(items));
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+            
+        }
+        return Ok(new ListResultDto<T>());
     }
 
     public async Task<Result<ListResultDto<T>>> CreateAsync(string url, TC createInputDto)
     {
-
         try
         {
-            var createJson =createInputDto.ToJson();
             var httpResponse = await (await GetHttpClientAsync())
-                .Value.PostAsync($"{url}", new StringContent(createJson, Encoding.UTF8, "application/json"));
+                .Value.PostAsync($"{url}", new StringContent(createInputDto.ToJson(), Encoding.UTF8, "application/json"));
 
-            httpResponse.EnsureSuccessStatusCode();
-            
             var json = await httpResponse.Content.ReadAsStringAsync();
             if (json == "[]" || json.IsNullOrWhiteSpace()) return Ok(new ListResultDto<T>());
 

@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace BookStoreMaui.Pages.Books.Add;
 
-public partial class AddBookViewModel(IBookAppService bookAppService, INavigationService navigateTo) : ObservableObject
+public partial class AddBookViewModel(IBookAppService bookAppService, INavigationService navigate) : ObservableObject
 {
     [ObservableProperty] private string? _name;
     [ObservableProperty] private DateTime _publishDate;
@@ -18,6 +18,9 @@ public partial class AddBookViewModel(IBookAppService bookAppService, INavigatio
     public IReadOnlyList<string> BookTypes { get; } = Enum.GetNames(typeof(BookType));
     
     [RelayCommand]
-    private async Task SaveBook() 
-        => await bookAppService.CreateBookAsync(new CreateBooDto(Name, SelectedBookType, PublishDate, Price));
+    private async Task SaveBook()
+    {
+        await bookAppService.CreateBookAsync(new CreateBooDto(Name, SelectedBookType, PublishDate, Price));
+        await navigate.ToBooksPage();
+    }
 }

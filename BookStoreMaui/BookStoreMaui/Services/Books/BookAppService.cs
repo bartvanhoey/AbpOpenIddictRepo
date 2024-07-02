@@ -1,6 +1,5 @@
 ﻿using BookStoreMaui.Services.Http;
 using BookStoreMaui.Services.OpenIddict.Infra;
-using FluentResults;
 using Microsoft.Extensions.Configuration;
 
 namespace BookStoreMaui.Services.Books;
@@ -16,6 +15,12 @@ public class BookAppService(
         return result.IsSuccess ? result.Value.Items : new List<BookDto>();
     }
 
+    public async Task<BookDto?> UpdateBookAsync(UpdateBookDto book)
+    {
+        var result = await httpService.UpdateAsync($"{config.GetAuthUrl()}/api/app/book/{book.Id}", book);
+        return result.IsSuccess ? result.Value.Items.FirstOrDefault() : null;
+    }
+
     public async Task DeleteBookAsync(Guid bookDtoId) 
         => await httpService.DeleteAsync($"{config.GetAuthUrl()}/api/app/book", bookDtoId);
 
@@ -23,7 +28,6 @@ public class BookAppService(
     {
         var result = await httpService.CreateAsync($"{config.GetAuthUrl()}/api/app/book", bookDto);
         return result.IsSuccess ? result.Value.Items.FirstOrDefault() : null;
-                
     }
 
     public async Task<BookDto?> GetBookAsync(string bookId)

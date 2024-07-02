@@ -4,4 +4,5 @@ public interface INavigationService
 {
     Task NavigateBack();
     Task ToAddBookPage();
+    Task ToBooksPage();
 }
