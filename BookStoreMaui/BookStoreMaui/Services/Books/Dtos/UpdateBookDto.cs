@@ -2,20 +2,11 @@ using BookStoreMaui.Models;
 
 namespace BookStoreMaui.Services.Books.Dtos;
 
-public class UpdateBookDto
+public class UpdateBookDto(Guid id, BookType type, float price, DateTime publishDate, string? name)
 {
-    public UpdateBookDto(Guid id, BookType type, float price, DateTime publishDate, string? name)
-    {
-        Id = id;
-        Type = type;
-        Price = price;
-        PublishDate = publishDate;
-        Name = name;
-    }
-
-    public Guid Id { get; set; }
-    public BookType Type { get; set; }
-    public float Price { get; set; }
-    public DateTime PublishDate { get; set; }
-    public string? Name { get; set; }
+    public Guid Id { get; set; } = id;
+    public BookType Type { get; set; } = type;
+    public float Price { get; set; } = price;
+    public DateTime PublishDate { get; set; } = publishDate;
+    public string? Name { get; set; } = name;
 }

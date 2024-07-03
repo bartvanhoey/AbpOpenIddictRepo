@@ -81,14 +81,9 @@ public static class MauiProgram
         
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
         return builder.Build();
-        
-        
     }
-    
-    
 }
