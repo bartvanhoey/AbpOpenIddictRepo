@@ -19,8 +19,13 @@ public class BookService(
     public async Task DeleteBookAsync(Guid bookDtoId) 
         => await httpService.DeleteAsync($"{config.GetBookApiUrl()}", bookDtoId);
 
+    public async Task CreateManyBooksAsync(IEnumerable<CreateBooDto> bookDtos) 
+        => await httpService.CreateManyAsync($"{config.GetBookApiUrl()}", bookDtos);
+
     public async Task<BookDto?> CreateBookAsync(CreateBooDto bookDto) 
-        => (await httpService.CreateAsync($"{config.GetBookApiUrl()}", bookDto)).Items.FirstOrDefault();
+        => await httpService.CreateAsync($"{config.GetBookApiUrl()}", bookDto);
+
+  
 
     public async Task<BookDto?> GetBookAsync(string bookId) 
         => await httpService.GetAsync($"{config.GetBookApiUrl()}/{bookId}");

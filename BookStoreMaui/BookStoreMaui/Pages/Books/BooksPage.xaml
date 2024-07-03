@@ -52,9 +52,9 @@
                         </SwipeView.LeftItems>
 
                         <StackLayout Padding="10">
-                            <Label Text="{Binding Id}" FontAttributes="Bold" />
-                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
                             <Label Text="{Binding PublishDate}" />
+                            <Label Text="{Binding Type}" />
                             <Label Text="{Binding Price}" />
                         </StackLayout>
                     </SwipeView>

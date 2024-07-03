@@ -8,7 +8,7 @@
     xmlns:home="clr-namespace:BookStoreMaui.Pages.Home"
     Title="BookStoreMaui">
 
-    <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}" FlyoutItemIsVisible="False" Route="LoginPage" />
+    <!-- <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}" FlyoutItemIsVisible="False" Route="LoginPage" /> -->
     <ShellContent Title="Home" ContentTemplate="{DataTemplate home:HomePage}" Route="HomePage" />
     <ShellContent Title="Logout" ContentTemplate="{DataTemplate pages:LogoutPage}" FlyoutItemIsVisible="True" Route="LogoutPage" />
     <ShellContent Title="Books" ContentTemplate="{DataTemplate books:BooksPage}" FlyoutItemIsVisible="True" Route="BooksPage" />

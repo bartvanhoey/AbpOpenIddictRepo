@@ -1,6 +1,6 @@
 ﻿namespace BookStoreMaui.Services.Http.Infra;
 
-public class ListResultDto<T> : IListResult<T>
+public class ListResultDto<T> : IListResult<T>, IHasTotalCount
 {
     public IReadOnlyList<T> Items
     {
@@ -8,7 +8,7 @@ public class ListResultDto<T> : IListResult<T>
         set => _items = value;
     }
 
-    public long TotalCount { get; }
+    public long TotalCount { get; set; }
 
     private IReadOnlyList<T>? _items;
 

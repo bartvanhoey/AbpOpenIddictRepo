@@ -50,23 +50,24 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService secureStorageS
         
     }
 
-    public async Task<ListResultDto<T>> CreateAsync(string uri, TC createInputDto)
+    public async Task<T> CreateAsync(string uri, TC createInputDto)
     {
-        
-            var httpResponse = await (await GetHttpClientAsync())
-                .Value.PostAsync($"{uri}", new StringContent(createInputDto.ToJson(), Encoding.UTF8, "application/json"));
+        var httpResponse = await (await GetHttpClientAsync())
+            .Value.PostAsync(uri, new StringContent(createInputDto.ToJson(), Encoding.UTF8, "application/json"));
 
-            var json = await httpResponse.Content.ReadAsStringAsync();
-            if (json == "[]" || json.IsNullOrWhiteSpace()) return new ListResultDto<T>();
-
-            if(json.StartsWith("{") && json.EndsWith("}"))
-                return new ListResultDto<T>(new List<T> { json.ToType<T>() });
-            
-            var items = json.ToType<List<T>>();
-            
-            return new ListResultDto<T>(items);
-                
+        var json = await httpResponse.Content.ReadAsStringAsync();
+        return json.ToType<T>();
     }
+
+    public async Task CreateManyAsync(string uri, IEnumerable<TC> createInputDto)
+    {
+        var httpResponse = await (await GetHttpClientAsync())
+            .Value.PostAsync($"{uri}/many", new StringContent(createInputDto.ToJson(), Encoding.UTF8, "application/json"));
+
+        httpResponse.EnsureSuccessStatusCode();
+    }
+
+    
 
     public async Task<T> GetAsync(string uri)
     {
