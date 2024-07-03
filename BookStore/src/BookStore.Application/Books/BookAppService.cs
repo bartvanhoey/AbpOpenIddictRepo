@@ -19,5 +19,7 @@ namespace BookStore.Books
             // UpdatePolicyName = BookStorePermissions.Books.Update;
             // DeletePolicyName = BookStorePermissions.Books.Delete;
         }
+
+        public async Task CreateManyAsync(IEnumerable<CreateBookDto> input) => await Repository.InsertManyAsync(ObjectMapper.Map<IEnumerable<CreateBookDto>, IEnumerable<Book>>(input));
     }
 }
