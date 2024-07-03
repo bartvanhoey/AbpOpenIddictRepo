@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace BookStoreMaui.Services.Books;
 
 public class BookService(
-    IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService,
+    IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService,
     IConfiguration config)
     : IBookService
 {
@@ -19,10 +19,10 @@ public class BookService(
     public async Task DeleteBookAsync(Guid bookDtoId) 
         => await httpService.DeleteAsync($"{config.GetBookApiUrl()}", bookDtoId);
 
-    public async Task CreateManyBooksAsync(IEnumerable<CreateBooDto> bookDtos) 
+    public async Task CreateManyBooksAsync(IEnumerable<CreateBookDto> bookDtos) 
         => await httpService.CreateManyAsync($"{config.GetBookApiUrl()}", bookDtos);
 
-    public async Task<BookDto?> CreateBookAsync(CreateBooDto bookDto) 
+    public async Task<BookDto?> CreateBookAsync(CreateBookDto bookDto) 
         => await httpService.CreateAsync($"{config.GetBookApiUrl()}", bookDto);
 
   

@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
 using BookStoreMaui.Pages;
+using BookStoreMaui.Pages.Authors;
+using BookStoreMaui.Pages.Authors.Add;
+using BookStoreMaui.Pages.Authors.Edit;
 using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
 using BookStoreMaui.Pages.Books.Edit;
-using BookStoreMaui.Pages.Home;
+using BookStoreMaui.Services.Authors;
+using BookStoreMaui.Services.Authors.Dtos;
 using BookStoreMaui.Services.Books;
 using BookStoreMaui.Services.Books.Dtos;
 using BookStoreMaui.Services.Http;
@@ -61,10 +65,8 @@ public static class MauiProgram
         
         builder.Services.AddTransient<LogoutPage>();
         builder.Services.AddTransient<LogoutViewModel>();
-        
-        builder.Services.AddTransient<HomePage>();
-        builder.Services.AddTransient<HomeViewModel>();
-        
+    
+        // BOOKS
         builder.Services.AddTransient<BooksPage>();
         builder.Services.AddTransient<BooksViewModel>();
         
@@ -74,10 +76,24 @@ public static class MauiProgram
         builder.Services.AddTransient<EditBookPage>();
         builder.Services.AddTransient<EditBookViewModel>();
 
-        builder.Services.AddTransient<IHttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>, 
-            HttpService<BookDto, CreateBooDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
+        builder.Services.AddTransient<IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>, 
+            HttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
+        
+        // AUTHORS
+        builder.Services.AddTransient<AuthorsPage>();
+        builder.Services.AddTransient<AuthorsViewModel>();
+        
+        builder.Services.AddTransient<AddAuthorPage>();
+        builder.Services.AddTransient<AddAuthorViewModel>();
+        
+        builder.Services.AddTransient<EditAuthorPage>();
+        builder.Services.AddTransient<EditAuthorViewModel>();
+        
+        builder.Services.AddTransient<IHttpService<AuthorDto, CreateAuthorDto, UpdateAuthorDto, GetAuthorsPagedRequestDto, Guid>, 
+            HttpService<AuthorDto, CreateAuthorDto, UpdateAuthorDto, GetAuthorsPagedRequestDto, Guid>>();
         
         builder.Services.AddTransient<IBookService, BookService>();
+        builder.Services.AddTransient<IAuthorService, AuthorService>();
         
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 
