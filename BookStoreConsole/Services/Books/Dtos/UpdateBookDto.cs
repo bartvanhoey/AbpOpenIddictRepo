@@ -1,7 +1,7 @@
 
 namespace BookStoreConsole.Services.Books.Dtos;
 
-public class UpdateBookDto(Guid id, BookType type, float price, DateTime publishDate, string? name)
+public class UpdateBookDto(Guid id, string? name, BookType type, DateTime publishDate, float price)
 {
     public Guid Id { get; set; } = id;
     public BookType Type { get; set; } = type;
