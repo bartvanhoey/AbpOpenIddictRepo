@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookStore.Authors;
 using BookStore.Books;
 using BookStore.Books.Dtos;
 
@@ -15,5 +16,7 @@ public class BookStoreApplicationAutoMapperProfile : Profile
          CreateMap<Book, BookDto>();
          CreateMap<CreateBookDto, Book>();
          CreateMap<UpdateBookDto, Book>();
+
+         CreateMap<Author, AuthorDto>();
     }
 }

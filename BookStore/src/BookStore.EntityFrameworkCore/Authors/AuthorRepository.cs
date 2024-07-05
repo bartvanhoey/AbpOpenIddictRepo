@@ -25,8 +25,6 @@ namespace BookStore.Authors
         {
             var dbSet = await GetDbSetAsync();
 
-            
-            
             return await dbSet.
                 WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -37,4 +35,6 @@ namespace BookStore.Authors
                 .ToListAsync();
         }
     }
+
+    
 }

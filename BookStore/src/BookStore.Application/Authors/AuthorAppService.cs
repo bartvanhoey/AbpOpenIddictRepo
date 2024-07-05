@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace BookStore.Authors
 {
+    [Authorize(BookStorePermissions.Authors.Default)]
     public class AuthorAppService : BookStoreAppService, IAuthorAppService
     {
         private readonly IAuthorRepository _authorRepository;
@@ -17,30 +21,32 @@ namespace BookStore.Authors
             _authorManager = authorManager;
         }
 
-     [Authorize(BookStorePermissions.Authors.Create)]
-public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
-{
-    var author = await _authorManager.CreateAsync(
-        input.Name,
-        input.BirthDate,
-        input.ShortBio
-    );
-
-    await _authorRepository.InsertAsync(author);
-
-    return ObjectMapper.Map<Author, AuthorDto>(author);
-}
-
-
-        public Task DeleteAsync(Guid id)
+        [Authorize(BookStorePermissions.Authors.Create)]
+        public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
         {
-            throw new NotImplementedException();
+            var author = await _authorManager.CreateAsync(
+                input.Name,
+                input.BirthDate,
+                input.ShortBio
+            );
+
+            await _authorRepository.InsertAsync(author);
+
+            return ObjectMapper.Map<Author, AuthorDto>(author);
         }
 
-        public Task<AuthorDto> GetAsync(Guid id)
+
+        [Authorize(BookStorePermissions.Authors.Delete)]
+        public async Task DeleteAsync(Guid id)
+        {
+            await _authorRepository.DeleteAsync(id);
+        }
+
+
+        public async Task<AuthorDto> GetAsync(Guid id)
         {
             var author = await _authorRepository.GetAsync(id);
-            return ObjectMapper.Map<Author, AuthorDto>(Author);
+            return ObjectMapper.Map<Author, AuthorDto>(author);
 
         }
 
@@ -58,12 +64,10 @@ public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
                 input.Filter
             );
 
-            var totalCount = await AsyncExecuter.CountAsync(
-                _authorRepository.WhereIf(
-                    !input.Filter.IsNullOrWhiteSpace(),
-                    author => author.Name.Contains(input.Filter)
-                )
-            );
+            var totalCount = input.Filter == null
+                ? await _authorRepository.CountAsync()
+                : await _authorRepository.CountAsync(
+                    author => author.Name.Contains(input.Filter));
 
             return new PagedResultDto<AuthorDto>(
                 totalCount,
@@ -72,9 +76,22 @@ public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
         }
 
 
-        public Task UpdateAsync(Guid id, UpdateAuthorDto input)
+
+        [Authorize(BookStorePermissions.Authors.Update)]
+        public async Task UpdateAsync(Guid id, UpdateAuthorDto input)
         {
-            throw new NotImplementedException();
+            var author = await _authorRepository.GetAsync(id);
+
+            if (author.Name != input.Name)
+            {
+                await _authorManager.ChangeNameAsync(author, input.Name);
+            }
+
+            author.BirthDate = input.BirthDate;
+            author.ShortBio = input.ShortBio;
+
+            await _authorRepository.UpdateAsync(author);
         }
+
     }
 }
