@@ -25,8 +25,6 @@ public class BookService(
     public async Task<BookDto?> CreateBookAsync(CreateBookDto bookDto) 
         => await httpService.CreateAsync($"{config.GetBookApiUrl()}", bookDto);
 
-  
-
     public async Task<BookDto?> GetBookAsync(string bookId) 
         => await httpService.GetAsync($"{config.GetBookApiUrl()}/{bookId}");
 }
