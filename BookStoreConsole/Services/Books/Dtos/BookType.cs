@@ -1,4 +1,4 @@
-namespace BookStoreConsole.Services.Books
+namespace BookStoreConsole.Services.Books.Dtos
 {
   public enum BookType
 {
