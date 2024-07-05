@@ -1,4 +1,4 @@
-﻿using BookStoreMaui.Pages.Home;
+﻿using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Services.OpenIddict;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,7 +22,7 @@ namespace BookStoreMaui.Pages
                 if (await _openIddictService.IsUserLoggedInAsync())
                 {
                     await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", false);
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}", false);
+                    await Shell.Current.GoToAsync($"//{nameof(BooksPage)}", false);
                 }
                 else
                 {

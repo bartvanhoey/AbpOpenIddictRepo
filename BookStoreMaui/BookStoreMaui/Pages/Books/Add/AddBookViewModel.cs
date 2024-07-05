@@ -21,7 +21,7 @@ public partial class AddBookViewModel(IBookService bookService, INavigationServi
     [RelayCommand]
     private async Task SaveBook()
     {
-        await bookService.CreateBookAsync(new CreateBooDto(Name, SelectedBookType, PublishDate, Price));
+        await bookService.CreateBookAsync(new CreateBookDto(Name, SelectedBookType, PublishDate, Price));
         // var createBooDto1 = new CreateBooDto("JustATest1", SelectedBookType, PublishDate, Price);
         // var createBooDto2 = new CreateBooDto("JustATest2", SelectedBookType, PublishDate, Price);
         // await bookService.CreateManyBooksAsync(new List<CreateBooDto> { createBooDto1, createBooDto2 });

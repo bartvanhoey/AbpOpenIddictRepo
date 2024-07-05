@@ -5,12 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:BookStoreMaui.Pages"
     xmlns:books="clr-namespace:BookStoreMaui.Pages.Books"
-    xmlns:home="clr-namespace:BookStoreMaui.Pages.Home"
+    
     Title="BookStoreMaui">
 
-    <!-- <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}" FlyoutItemIsVisible="False" Route="LoginPage" /> -->
-    <ShellContent Title="Home" ContentTemplate="{DataTemplate home:HomePage}" Route="HomePage" />
+    <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}" FlyoutItemIsVisible="False" Route="LoginPage" />
+    <ShellContent Title="Books" ContentTemplate="{DataTemplate books:BooksPage}" FlyoutItemIsVisible="False" Route="BooksPage" />
     <ShellContent Title="Logout" ContentTemplate="{DataTemplate pages:LogoutPage}" FlyoutItemIsVisible="True" Route="LogoutPage" />
-    <ShellContent Title="Books" ContentTemplate="{DataTemplate books:BooksPage}" FlyoutItemIsVisible="True" Route="BooksPage" />
 
 </Shell>
