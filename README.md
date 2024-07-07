@@ -697,6 +697,6 @@ Enter the standard credentials (user name:**admin** - password: **1q2w3E\***) an
 You will be redirected to the HomePage of the app. Et voilà! As you can see, you received an access token
 from the **ABP Framework API**. Now you can start consuming the API!
 
-Get the[source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
+Get the [source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
 
 Enjoy and have fun!
