@@ -121,6 +121,41 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 clientUri: swaggerRootUrl
             );
         }
+
+
+         // MauiBookStore client
+    var mauiScopes = new List<string>
+    {
+        "openid",
+        "offline_access",
+        OpenIddictConstants.Permissions.Scopes.Address,
+        OpenIddictConstants.Permissions.Scopes.Email,
+        OpenIddictConstants.Permissions.Scopes.Phone,
+        OpenIddictConstants.Permissions.Scopes.Profile,
+        OpenIddictConstants.Permissions.Scopes.Roles,
+        "BookStore"
+    };
+
+    var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
+    if (!mauiClientId.IsNullOrWhiteSpace())
+    {
+        var mauiRootUrl = configurationSection["BookStore_Maui:RootUrl"];
+        await CreateApplicationAsync(
+            name: mauiClientId,
+            type: OpenIddictConstants.ClientTypes.Confidential,
+            consentType: OpenIddictConstants.ConsentTypes.Implicit,
+            scopes: mauiScopes,
+            grantTypes:
+            [
+                OpenIddictConstants.GrantTypes.AuthorizationCode,
+                OpenIddictConstants.GrantTypes.RefreshToken
+            ],
+            secret: configurationSection["BookStore_Maui:ClientSecret"],
+            redirectUri: $"{mauiRootUrl}",
+            postLogoutRedirectUri: $"{mauiRootUrl}",
+            displayName: "MauiBookStore"
+        );
+    }
     }
 
     private async Task CreateApplicationAsync(
