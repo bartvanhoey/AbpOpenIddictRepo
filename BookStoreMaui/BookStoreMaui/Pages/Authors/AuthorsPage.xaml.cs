@@ -8,8 +8,13 @@ namespace BookStoreMaui.Pages.Authors;
 
 public partial class AuthorsPage : ContentPage
 {
-    public AuthorsPage()
+    private readonly AuthorsViewModel _vm;
+
+    public AuthorsPage(AuthorsViewModel authorsViewModel)
     {
         InitializeComponent();
+        BindingContext = _vm= authorsViewModel;
     }
+
+    protected override async void OnAppearing() => await _vm.OnAppearing();
 }

@@ -4,6 +4,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BookStoreMaui.Pages.Authors.Edit.EditAuthorPage">
     <ContentPage.Content>
-        
+        <VerticalStackLayout Padding="10">
+            <Entry Placeholder="Name" Text="{Binding Author.Name}" />
+            <DatePicker Date="{Binding Author.BirthDate}"></DatePicker>
+            <Editor Placeholder="Short bio" Text="{Binding Author.ShortBio}" />
+            <Button Text="Save" Command="{Binding SaveAuthorCommand}" />
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

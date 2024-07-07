@@ -8,8 +8,10 @@ namespace BookStoreMaui.Pages.Authors.Add;
 
 public partial class AddAuthorPage : ContentPage
 {
-    public AddAuthorPage()
+    public AddAuthorPage(AddAuthorViewModel addAuthorViewModel)
     {
+        BindingContext = addAuthorViewModel;
         InitializeComponent();
     }
+    
 }
