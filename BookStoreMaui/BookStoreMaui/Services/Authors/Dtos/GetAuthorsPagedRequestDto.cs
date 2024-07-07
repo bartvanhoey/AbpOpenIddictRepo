@@ -1,6 +1,8 @@
+using BookStoreMaui.Services.Http.Infra;
+
 namespace BookStoreMaui.Services.Authors.Dtos;
 
-public class GetAuthorsPagedRequestDto
+public class GetAuthorsPagedRequestDto  : PagedRequestDto
 {
     
 }
