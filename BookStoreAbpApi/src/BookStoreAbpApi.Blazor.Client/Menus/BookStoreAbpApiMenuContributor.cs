@@ -79,8 +79,8 @@ public class BookStoreAbpApiMenuContributor : IMenuContributor
                 url: "/books"
             ));
         }
-        
-        
+
+
         if (await context.IsGrantedAsync(BookStoreAbpApiPermissions.Authors.Default))
         {
             bookStoreMenu.AddItem(new ApplicationMenuItem(
@@ -89,7 +89,6 @@ public class BookStoreAbpApiMenuContributor : IMenuContributor
                 url: "/authors"
             ));
         }
-
     }
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)

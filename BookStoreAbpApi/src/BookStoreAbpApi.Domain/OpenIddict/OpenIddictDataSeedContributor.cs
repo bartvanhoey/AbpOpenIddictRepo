@@ -122,20 +122,6 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             );
         }
 
-
-         // MauiBookStore client
-    // var mauiScopes = new List<string>
-    // {
-    //     "offline_access",
-    //     OpenIddictConstants.Permissions.Scopes.Address,
-    //     OpenIddictConstants.Permissions.Scopes.Email,
-    //     OpenIddictConstants.Permissions.Scopes.Phone,
-    //     OpenIddictConstants.Permissions.Scopes.Profile,
-    //     OpenIddictConstants.Permissions.Scopes.Roles,
-    //     "BookStoreAbpApi"
-    // };
-
-
     commonScopes.Add("offline_access");
 
     var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
