@@ -18,7 +18,8 @@ public partial class EditBookViewModel(IBookService bookService, INavigationServ
 
     public async Task OnAppearing()
     {
-        if (BookId != null) Book = await bookService.GetBookAsync(BookId);
+        if (BookId != null) 
+            Book = await bookService.GetBookAsync(BookId);
     }
 
     [RelayCommand]
