@@ -12,7 +12,7 @@ Keep in mind that I only include the most important code snippets in this articl
 
 ### Source code
 
-The source of the article is [available on GitHub](https://github.com/bartvanhoey/MauiAbpOpenIddict), but keep in mind that the source code is not production ready.
+The source of the article is [available on GitHub](https://github.com/bartvanhoey/AbpOpenIddictRepo), but keep in mind that the source code is not production ready.
 
 ## Requirements
 
@@ -683,21 +683,20 @@ Add the code below to the **Info.plist** file of the iOS project.
                 <string>Editor</string>
         </dict>
     </array>
-`` 
+```
 
 ## Start API and .NET MAUI app
 
 Run the **HttpApi.Host** project and make sure **Ngrok** is running too.
 Copy the **Ngrok url** and replace the **AuthorityUrl** in the **appsettings.json** file of the **.NET MAUI app**.
 
-Start the **.NET Maui app** and click the **Login** button to display the ABP Framework login page. 
+Start the **.NET Maui app** and click the **Login** button to display the ABP Framework login page.
 
-Enter the standard credentials (user name:**admin** - password: **1q2w3E\***) and click Login. 
+Enter the standard credentials (user name:**admin** - password: **1q2w3E\***) and click Login.
 
 You will be redirected to the HomePage of the app. Et voilà! As you can see, you received an access token
-from the **ABP Framework API**. Now you can start consuming the API! 
+from the **ABP Framework API**. Now you can start consuming the API!
 
-Get the[source code](https://github.com/bartvanhoey/MauiAbpOpenIddict) on GitHub. 
-
+Get the[source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
 
 Enjoy and have fun!
