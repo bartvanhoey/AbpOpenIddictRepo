@@ -109,7 +109,7 @@ Open a command prompt in the root of the ABP Framework project and enter the com
 
 The **ABP Framework API** is now publicly available on [https://f7db-2a02-810d-98c0-576c-647e-cd22-5b-e9a3.eu.ngrok.io](https://f7db-2a02-810d-98c0-576c-647e-cd22-5b-e9a3.eu.ngrok.io)
 
-![ngrok in action](Images/ngrok.jpg)
+![ngrok in action](images/ngrok_in_action.png)
 
 ### Copy the ngrok url
 
