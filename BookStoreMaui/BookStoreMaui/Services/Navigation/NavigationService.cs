@@ -1,3 +1,4 @@
+using BookStoreMaui.Pages.Authors.Add;
 using BookStoreMaui.Pages.Books;
 using BookStoreMaui.Pages.Books.Add;
 using BookStoreMaui.Pages.Books.Edit;
@@ -10,7 +11,7 @@ public class NavigationService(IServiceProvider services) : INavigationService
 
     public async Task ToAddBookPage() => await NavigateToPage<AddBookPage>();
     public async Task ToBooksPage() => await NavigateToPage<BooksPage>();
-
+    public async Task ToAddAuthorPage() => await NavigateToPage<AddAuthorPage>();
     private Task NavigateToPage<T>() where T : Page
     {
         var page = ResolvePage<T>();
