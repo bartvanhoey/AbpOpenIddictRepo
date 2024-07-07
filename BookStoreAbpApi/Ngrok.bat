@@ -1,7 +1,7 @@
 @echo off
 
 set targetFile="C:\Data\ABP\_ABPmyArticles\EditedAfterJan2024\AbpOpenIddictRepo\BookStoreMaui\BookStoreMaui\appsettings.json"
-set portNumber=44336
+set portNumber=44344
 
 setlocal disabledelayedexpansion
 
