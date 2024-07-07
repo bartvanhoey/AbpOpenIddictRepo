@@ -107,7 +107,7 @@ Open a command prompt in the root of the ABP Framework project and enter the com
     ngrok.exe http -region https://localhost:<replace-with-the-abp-api-port-number>/
 ```
 
-The **ABP Framework API** is now publicly available on [https://f7db-2a02-810d-98c0-576c-647e-cd22-5b-e9a3.eu.ngrok.io](https://f7db-2a02-810d-98c0-576c-647e-cd22-5b-e9a3.eu.ngrok.io)
+The **ABP Framework API** is now publicly available on [https://7750-2a02-810d-af40-269c-f4e5-5286-1435-a6b7.ngrok-free.app](https://7750-2a02-810d-af40-269c-f4e5-5286-1435-a6b7.ngrok-free.app)
 
 ![ngrok in action](images/ngrok_in_action.png)
 
