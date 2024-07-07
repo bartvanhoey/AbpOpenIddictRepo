@@ -124,17 +124,19 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
 
          // MauiBookStore client
-    var mauiScopes = new List<string>
-    {
-        "openid",
-        "offline_access",
-        OpenIddictConstants.Permissions.Scopes.Address,
-        OpenIddictConstants.Permissions.Scopes.Email,
-        OpenIddictConstants.Permissions.Scopes.Phone,
-        OpenIddictConstants.Permissions.Scopes.Profile,
-        OpenIddictConstants.Permissions.Scopes.Roles,
-        "BookStore"
-    };
+    // var mauiScopes = new List<string>
+    // {
+    //     "offline_access",
+    //     OpenIddictConstants.Permissions.Scopes.Address,
+    //     OpenIddictConstants.Permissions.Scopes.Email,
+    //     OpenIddictConstants.Permissions.Scopes.Phone,
+    //     OpenIddictConstants.Permissions.Scopes.Profile,
+    //     OpenIddictConstants.Permissions.Scopes.Roles,
+    //     "BookStoreAbpApi"
+    // };
+
+
+    commonScopes.Add("offline_access");
 
     var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
     if (!mauiClientId.IsNullOrWhiteSpace())
@@ -144,7 +146,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             name: mauiClientId,
             type: OpenIddictConstants.ClientTypes.Confidential,
             consentType: OpenIddictConstants.ConsentTypes.Implicit,
-            scopes: mauiScopes,
+            scopes: commonScopes,
             grantTypes:
             [
                 OpenIddictConstants.GrantTypes.AuthorizationCode,
