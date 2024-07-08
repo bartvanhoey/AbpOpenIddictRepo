@@ -18,16 +18,11 @@ services.AddTransient<IBookService, BookService>(options => new BookService(
     options.GetRequiredService<IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>(),
     "https://localhost:44336/api/app/book"));
 
-
-
 var bookService = services.BuildServiceProvider().GetRequiredService<IBookService>();
 
 var getBooks = await bookService.GetBooksAsync();
 
 var createdBook = await bookService.CreateBookAsync(new CreateBookDto("Book 5", BookType.Adventure, DateTime.Now, 10.0f));
-
-
-
 
 var updatedBook = bookService.UpdateBookAsync(new UpdateBookDto(createdBook!.Id, "Book 5 Updated", BookType.ScienceFiction, DateTime.Now.AddMonths(5), 10.0f));
 

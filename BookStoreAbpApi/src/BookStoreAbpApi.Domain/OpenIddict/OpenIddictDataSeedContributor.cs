@@ -38,7 +38,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         IOpenIddictScopeRepository openIddictScopeRepository,
         IOpenIddictScopeManager scopeManager,
         IPermissionDataSeeder permissionDataSeeder,
-        IStringLocalizer<OpenIddictResponse> l )
+        IStringLocalizer<OpenIddictResponse> l)
     {
         _configuration = configuration;
         _openIddictApplicationRepository = openIddictApplicationRepository;
@@ -60,8 +60,11 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     {
         if (await _openIddictScopeRepository.FindByNameAsync("BookStoreAbpApi") == null)
         {
-            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor {
-                Name = "BookStoreAbpApi", DisplayName = "BookStoreAbpApi API", Resources = { "BookStoreAbpApi" }
+            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor
+            {
+                Name = "BookStoreAbpApi",
+                DisplayName = "BookStoreAbpApi API",
+                Resources = { "BookStoreAbpApi" }
             });
         }
     }
@@ -122,28 +125,52 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             );
         }
 
-    commonScopes.Add("offline_access");
+        commonScopes.Add("offline_access");
 
-    var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
-    if (!mauiClientId.IsNullOrWhiteSpace())
-    {
-        var mauiRootUrl = configurationSection["BookStore_Maui:RootUrl"];
-        await CreateApplicationAsync(
-            name: mauiClientId,
-            type: OpenIddictConstants.ClientTypes.Confidential,
-            consentType: OpenIddictConstants.ConsentTypes.Implicit,
-            scopes: commonScopes,
-            grantTypes:
-            [
-                OpenIddictConstants.GrantTypes.AuthorizationCode,
+        var mauiClientId = configurationSection["BookStore_Maui:ClientId"];
+        if (!mauiClientId.IsNullOrWhiteSpace())
+        {
+            var mauiRootUrl = configurationSection["BookStore_Maui:RootUrl"];
+            await CreateApplicationAsync(
+                name: mauiClientId,
+                type: OpenIddictConstants.ClientTypes.Confidential,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                scopes: commonScopes,
+                grantTypes:
+                [
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
                 OpenIddictConstants.GrantTypes.RefreshToken
-            ],
-            secret: configurationSection["BookStore_Maui:ClientSecret"],
-            redirectUri: $"{mauiRootUrl}",
-            postLogoutRedirectUri: $"{mauiRootUrl}",
-            displayName: "MauiBookStore"
-        );
-    }
+                ],
+                secret: configurationSection["BookStore_Maui:ClientSecret"],
+                redirectUri: $"{mauiRootUrl}",
+                postLogoutRedirectUri: $"{mauiRootUrl}",
+                displayName: "MauiBookStore"
+            );
+        }
+
+        // BookStoreConsole Client
+        var bookStoreConsoleClientId = configurationSection["BookStore_Console:ClientId"];
+        if (!bookStoreConsoleClientId.IsNullOrWhiteSpace())
+        {
+            var bookStoreConsoleRootUrl = configurationSection["BookStore_Console:RootUrl"]?.TrimEnd('/');
+            await CreateApplicationAsync(
+                name: bookStoreConsoleClientId,
+                type: OpenIddictConstants.ClientTypes.Confidential,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "BookStore Console Application",
+                scopes: commonScopes,
+                grantTypes: new List<string>
+                {
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.GrantTypes.Password,
+                    OpenIddictConstants.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.GrantTypes.RefreshToken
+                },
+                secret: configurationSection["BookStore_Console:ClientSecret"] ?? "1q2w3e*",
+                redirectUri: $"{bookStoreConsoleRootUrl}/authentication/login-callback"
+            );
+        }
+
     }
 
     private async Task CreateApplicationAsync(
@@ -173,7 +200,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var client = await _openIddictApplicationRepository.FindByClientIdAsync(name);
 
-        var application = new AbpApplicationDescriptor {
+        var application = new AbpApplicationDescriptor
+        {
             ClientId = name,
             ClientType = type,
             ClientSecret = secret,
