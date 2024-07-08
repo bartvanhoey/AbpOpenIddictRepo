@@ -1,8 +1,7 @@
-using BookStoreConsole.Services.Authors;
 using BookStoreConsole.Services.Authors.Dtos;
 using BookStoreConsole.Services.Http;
 
-namespace AuthorStoreConsole.Services.Authors;
+namespace BookStoreConsole.Services.Authors;
 
 public class AuthorService(
     IHttpService<AuthorDto, CreateAuthorDto, UpdateAuthorDto, GetAuthorsPagedRequestDto, Guid> httpService,

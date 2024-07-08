@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using AuthorStoreConsole.Services.Authors;
 using BookStoreConsole.Services.Authors;
 using BookStoreConsole.Services.Authors.Dtos;
 using BookStoreConsole.Services.Books;
