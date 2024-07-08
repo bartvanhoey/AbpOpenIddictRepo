@@ -4,7 +4,7 @@ namespace BookStoreAspNetCoreWebApi.Controllers.Books
  {
     public static class  BookList
     {
-        public static List<BookDto> GetBooks;
+        public static readonly List<BookDto> GetBooks;
 
         static BookList()
         {

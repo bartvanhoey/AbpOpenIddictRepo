@@ -4,6 +4,7 @@ namespace BookStoreAspNetCoreWebApi.Controllers.Books.Dtos
 {
     public class CreateBookDto
     {
+        public Guid Id { get; set; }        
 
         [Required]
         [StringLength(128)]
@@ -20,5 +21,7 @@ namespace BookStoreAspNetCoreWebApi.Controllers.Books.Dtos
         [Required]
 
         public float Price { get; set; }
+        
+        public Guid AuthorId { get; set; }
     }
 }

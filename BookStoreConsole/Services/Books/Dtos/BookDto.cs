@@ -4,16 +4,16 @@ namespace BookStoreConsole.Services.Books.Dtos;
 
 public class BookDto
 {
-    public BookDto()
-    {
-    }
+    // public BookDto()
+    // {
+    // }
 
-    public BookDto(string? name, DateTime publishDate, float price)
-    {
-        Name = name;
-        PublishDate = publishDate;
-        Price = price;
-    }
+    // public BookDto(string? name, DateTime publishDate, float price)
+    // {
+    //     Name = name;
+    //     PublishDate = publishDate;
+    //     Price = price;
+    // }
 
     public Guid Id { get; set; }
     

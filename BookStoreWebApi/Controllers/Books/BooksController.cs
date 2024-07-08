@@ -20,7 +20,7 @@ namespace BookStoreAspNetCoreWebApi.Controllers.Books
         [HttpPost]
         public BookDto Create([FromBody] CreateBookDto createBookDto)
         {
-            var bookDto = new BookDto { Name = createBookDto.Name, Type = createBookDto.Type, Price = createBookDto.Price, PublishDate = createBookDto.PublishDate, Id = new Guid()};
+            var bookDto = new BookDto { Name = createBookDto.Name, Type = createBookDto.Type, Price = createBookDto.Price, PublishDate = createBookDto.PublishDate, Id = createBookDto.Id};
             BookList.GetBooks.Add(bookDto);
             return bookDto;
         }
