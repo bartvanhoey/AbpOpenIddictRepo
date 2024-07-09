@@ -2,7 +2,9 @@
 
 ## Introduction
 
-In this blog post, I will show you how you can consume a **C# CRUD API** in by making use of a **Generic HTTP Service**
+In this blog post, I will show you how you can consume a **C# CRUD API** by making use of a **Generic HTTP Service**
+
+To simplify things, we will create a standard **.NET Core WEB API** and a **.NET Core Console** application to implement a generic HTTP Service that consumes a C# CRUD API.
 
 ## Requirements
 
@@ -11,7 +13,7 @@ The following tools are needed to be able to run the solution.
 - .NET 8.0 SDK
 - VsCode, Visual Studio 2022 or another compatible IDE
 
-In the [GitHub repo](https://github.com/bartvanhoey/AbpOpenIddictRepo) you find the **BookStoreWebApi** and **BookStoreConsole** applications that we will.
+In the [GitHub repo](https://github.com/bartvanhoey/AbpOpenIddictRepo) you can find the **BookStoreWebApi** and **BookStoreConsole** applications that we will.
 
 ## Development
 
@@ -85,7 +87,10 @@ namespace BookStoreWebApi.Controllers
 
  ![Swagger Api Endpoints BooksController](../images/swagger_bookscontroller.png )
 
-### Create Generic HttpService
+## Create a .NET Console app
+
+
+
 
 Get the [source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
 
