@@ -24,7 +24,7 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService
         if (getListRequestDto is IPagedRequestDto)
         {
             var pagedResultDto = json.ToType<PagedResultDto<T>>();
-            return new ListResultDto<T>(pagedResultDto.Items, pagedResultDto.TotalCount);
+            return new PagedResultDto<T>(pagedResultDto.TotalCount,pagedResultDto.Items);
         }
 
         var listResultDto = new ListResultDto<T>(json.ToType<List<T>>());
