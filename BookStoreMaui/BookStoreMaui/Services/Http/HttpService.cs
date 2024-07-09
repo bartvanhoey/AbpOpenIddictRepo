@@ -25,7 +25,7 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService secureStorageS
         if (getListRequestDto is IPagedRequestDto)
         {
             var pagedResultDto = json.ToType<PagedResultDto<T>>();
-            return new ListResultDto<T>(pagedResultDto.Items, pagedResultDto.TotalCount);
+            return new PagedResultDto<T>(pagedResultDto.TotalCount, pagedResultDto.Items);
         }
 
         var listResultDto = new ListResultDto<T>(json.ToType<List<T>>());
@@ -34,7 +34,6 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService secureStorageS
 
     public async Task<ListResultDto<T>> UpdateAsync(string uri, TU updateInputDto)
     {
-        
             var httpResponse = await (await GetHttpClientAsync())
                 .Value.PutAsync($"{uri}", new StringContent(updateInputDto.ToJson(), Encoding.UTF8, "application/json"));
 
