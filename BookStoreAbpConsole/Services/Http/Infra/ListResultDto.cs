@@ -1,6 +1,6 @@
 ﻿namespace BookStoreAbpConsole.Services.Http.Infra;
 
-public class ListResultDto<T> : IListResult<T>, IHasTotalCount
+public class ListResultDto<T> : IListResult<T>
 {
     public IReadOnlyList<T> Items
     {
@@ -8,7 +8,7 @@ public class ListResultDto<T> : IListResult<T>, IHasTotalCount
         set => _items = value;
     }
 
-    public long TotalCount { get; set; }
+    
 
     private IReadOnlyList<T>? _items;
 
@@ -19,12 +19,8 @@ public class ListResultDto<T> : IListResult<T>, IHasTotalCount
     public ListResultDto(IReadOnlyList<T> items)
     {
         Items = items;
-        TotalCount =  items.Count;
+    
     }
 
-    public ListResultDto(IReadOnlyList<T> items, long totalCount)
-    {
-        Items = items;
-        TotalCount = totalCount;
-    }
+
 }
