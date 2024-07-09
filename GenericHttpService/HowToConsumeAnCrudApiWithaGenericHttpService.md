@@ -21,159 +21,71 @@ In the [GitHub repo](https://github.com/bartvanhoey/AbpOpenIddictRepo) you find 
     dotnet new webapi --use-controllers -o BookStoreWebApi
 ```
 
+### Copy Data/Infra/Dtos folders
 
-### Open & Run the Application
+Copy/paste the Data/Infra and Dtos folder of the BookstoreWebApi sample project into the root of your project.
 
-- Open the solution in Visual Studio (or your favorite IDE).
-- Run the `AbpBlazorCustomizeLoginPage.DbMigrator` application to apply the migrations and seed the initial data.
-- Run the `AbpBlazorCustomizeLoginPage.HttpApi.Host` application to start the server-side.
-- Run the `AbpBlazorCustomizeLoginPage.Blazor` application to start the Blazor UI project.
-
-## Create a CustomLoginModel
-
-- Create a folder structure **Pages/Account** in the **HttpApi.Host** project of your application.
-- Add a **CustomLoginModel.cs** class to the **Account** folder.
+### Add a BooksController class to the Controllers folder
 
 ```csharp
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Volo.Abp.Account.Web;
-using Volo.Abp.Account.Web.Pages.Account;
+using BookStoreWebApi.Data;
+using BookStoreWebApi.Dtos.Books;
+using BookStoreWebApi.Infra;
+using Microsoft.AspNetCore.Mvc;
 
-namespace AbpBlazorCustomizeLoginPage.HttpApi.Host.Pages.Account
+namespace BookStoreWebApi.Controllers
 {
-  public class CustomLoginModel : LoginModel
-  {
-    public CustomLoginModel(IAuthenticationSchemeProvider schemeProvider, IOptions<AbpAccountOptions> accountOptions, IOptions<IdentityOptions> identityOptions, IdentityDynamicClaimsPrincipalContributorCache contributorCache)
-        : base(schemeProvider, accountOptions, identityOptions, contributorCache) { }
-  }
-}
-```
-
-- Add a **Login.cshtml** file to the **Account** folder.
-
-```html
-@page
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI
-@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
-@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
-
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.Account.Localization
-@using Volo.Abp.Account.Settings
-@using Volo.Abp.Settings
-
-@model AbpBlazorCustomizeLoginPage.HttpApi.Host.Pages.Account.CustomLoginModel
-
-@inject IHtmlLocalizer<AccountResource> L
-@inject Volo.Abp.Settings.ISettingProvider SettingProvider
-
-<div class="card text-center mt-3 shadow-sm rounded">
-    <div class="card-body abp-background p-5">
-        <img class="mb-4" src="~/images/abp-logo-light.svg" alt="ABP logo" width="115" height="55">
-        <h4>@L["Login"]</h4>
-        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
-        {
-            <strong>
-                @L["AreYouANewUser"]
-                <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
-            </strong>
-        }
-        @if (Model.EnableLocalLogin)
-        {
-            <form method="post" class="mt-4 text-left">
-                <input asp-for="ReturnUrl" />
-                <input asp-for="ReturnUrlHash" />
-                <div class="form-group">
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" placeholder="Username" />
-                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="LoginInput.Password" class="form-control" placeholder="Password"/>
-                    <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
-                </div>
-                <abp-row>
-                    <abp-column>
-                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4" />
-                    </abp-column>
-                    <abp-column class="text-right">
-                        <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
-                    </abp-column>
-                </abp-row>
-                <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
-                @if (Model.ShowCancelButton)
-                {
-                    <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-block btn-lg mt-3">@L["Cancel"]</abp-button>
-                }
-            </form>
-        }
-        @if (Model.VisibleExternalProviders.Any())
-        {
-            <div class="mt-2">
-                <h5>@L["OrLoginWith"]</h5>
-                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-                    <input asp-for="ReturnUrl" />
-                    <input asp-for="ReturnUrlHash" />
-                    @foreach (var provider in Model.VisibleExternalProviders)
-                    {
-                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["GivenTenantIsNotAvailable", provider.DisplayName]">@provider.DisplayName</button>
-                    }
-                </form>
-            </div>
-        }
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-            <div class="alert alert-warning">
-                <strong>@L["InvalidLoginRequest"]</strong>
-                @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
-            </div>
-        }
-    </div>
-</div>
-```
-
-## Add some custom styles and images to the HttpApi.Host project
-
-- add a file **login.css** to the **wwwroot** folder of the **HttpApi.Host** project.
-
-```css
-.abp-background {
-  background-color: #e90052 !important;
-}
-```
-
-- Open file **AbpBlazorCustomizeLoginPageHttpApiHostModule.cs** and update the **ConfigureBundles()** method.
-
-```csharp
- private void ConfigureBundles()
- {
-    Configure<AbpBundlingOptions>(options =>
+    [Route("api/app/book")]
+    [ApiController]
+    public class BooksController : ControllerBase
     {
-        options.StyleBundles.Configure(
-            LeptonXLiteThemeBundles.Styles.Global,
-            bundle =>
-            {
-                bundle.AddFiles("/global-styles.css");
-                bundle.AddFiles("/login.css");
-            }
-        );
-    });
+        [HttpGet]
+        public PagedResultDto<BookDto> Get() 
+            => new() { Items = BookList.GetBooks, TotalCount = BookList.GetBooks.Count };
+
+        [HttpGet("{id}")]
+        public BookDto? Get(Guid id) 
+            => BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+
+        
+        [HttpPost]
+        public BookDto Create([FromBody] CreateBookDto createBookDto)
+        {
+            var bookDto = new BookDto { Name = createBookDto.Name, Type = createBookDto.Type, Price = createBookDto.Price, PublishDate = createBookDto.PublishDate, Id = createBookDto.Id};
+            BookList.GetBooks.Add(bookDto);
+            return bookDto;
+        }
+
+        
+        [HttpPut("{id}")]
+        public BookDto? Put(Guid id, [FromBody] UpdateBookDto updateBookDto)
+        {
+            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+            if (bookDto == null) return bookDto;
+            bookDto.Name = updateBookDto.Name;
+            bookDto.Price = updateBookDto.Price;
+            bookDto.PublishDate = updateBookDto.PublishDate;
+            bookDto.Type = updateBookDto.Type;
+            return bookDto;
+        }
+
+        
+        [HttpDelete("{id}")]
+        public void Delete(Guid id)
+        {
+            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+            if (bookDto != null) BookList.GetBooks.Remove(bookDto);
+        }
+    }
 }
+
 ```
 
-- add an **assets/images** folder to the **wwwroot** folder of the **HttpApi.Host** project and copy/paste the **abp logo** in the **images** folder. You can find a copy of the logo [here](https://github.com/bartvanhoey/AbpOpenIddictRepo/blob/main/src/AbpBlazorCustomizeLoginPage.HttpApi.Host/wwwroot/images/abp-logo-light.svg).
+### Run the API
 
-## Start both the Blazor and the HttpApi.Host project to run the application
+ ![Swagger Api Endpoints BooksController](../images/swagger_bookscontroller.png )
 
-Et voilà! This is the result.
-
-![Blazor Up and Running with customized login page](images/loginpage.jpg)
-
-You can now modify the login page, add your custom styles, custom images, etc.
-
-Find more about ASP.NET Core (MVC/Razor Pages) User Interface Customization Guide [here](https://docs.abp.io/en/abp/4.1/UI/AspNetCore/Customization-User-Interface).
+### Create Generic HttpService
 
 Get the [source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
 
