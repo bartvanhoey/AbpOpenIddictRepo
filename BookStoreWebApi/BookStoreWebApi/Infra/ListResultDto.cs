@@ -1,4 +1,4 @@
-﻿namespace BookStoreWebApi.Models;
+﻿namespace BookStoreWebApi.Infra;
 
 public class ListResultDto<T> : IListResult<T>
 {

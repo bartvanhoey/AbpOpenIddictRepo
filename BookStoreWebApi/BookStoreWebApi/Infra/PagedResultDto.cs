@@ -1,4 +1,4 @@
-﻿namespace BookStoreWebApi.Models;
+﻿namespace BookStoreWebApi.Infra;
 
 public class PagedResultDto<T> : ListResultDto<T>, IPagedResult<T>
 {

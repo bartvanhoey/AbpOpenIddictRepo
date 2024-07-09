@@ -1,9 +1,9 @@
-﻿using BookStoreWebApi.Controllers.Books.Dtos;
-using BookStoreWebApi.Data;
-using BookStoreWebApi.Models;
+﻿using BookStoreWebApi.Data;
+using BookStoreWebApi.Dtos.Books;
+using BookStoreWebApi.Infra;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStoreWebApi.Controllers.Books
+namespace BookStoreWebApi.Controllers
 {
     [Route("api/app/book")]
     [ApiController]

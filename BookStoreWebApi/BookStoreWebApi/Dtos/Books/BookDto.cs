@@ -1,4 +1,4 @@
-namespace BookStoreWebApi.Controllers.Books.Dtos
+namespace BookStoreWebApi.Dtos.Books
 {
     public class BookDto
     {

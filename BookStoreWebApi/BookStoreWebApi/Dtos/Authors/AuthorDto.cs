@@ -1,4 +1,4 @@
-﻿namespace BookStoreWebApi.Controllers.Authors.Dtos;
+﻿namespace BookStoreWebApi.Dtos.Authors;
 
 public class AuthorDto
 {

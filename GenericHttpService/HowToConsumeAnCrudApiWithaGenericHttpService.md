@@ -2,32 +2,7 @@
 
 ## Introduction
 
-In this blog post, I will show you how you can consume a C# CRUD API in by making use of a Generic HTTP Service
-
-In the ABP Framework, you typically implement the **ICrudAppService** interface, which has **generic arguments** for the different **CRUD operations**, to create a simple **CRUD application service**.
-
-```csharp
-public interface IBookAppService : 
-    ICrudAppService< //Defines CRUD methods
-        BookDto, //Used to show books
-        Guid, //Primary key of the book entity
-        PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
-        CreateBookDto, //Used to create a new book
-        UpdateBookDto> //Used to update a book
-{
-}
-```
-
-For each **CRUD application service** that implements the **ICrudAppService** interface, the **ABP Framework** automatically generates the following **CRUD API endpoints** in the following manner:
-
-![Swagger endpoints BookAppService](../images/swagger_bookappservice.png)
-
-
-
-
-## Source Code
-
-The [source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) of the sample applications is available [on GitHub](https://github.com/bartvanhoey/AbpOpenIddictRepo).
+In this blog post, I will show you how you can consume a **C# CRUD API** in by making use of a **Generic HTTP Service**
 
 ## Requirements
 
@@ -36,21 +11,16 @@ The following tools are needed to be able to run the solution.
 - .NET 8.0 SDK
 - VsCode, Visual Studio 2022 or another compatible IDE
 
+In the [GitHub repo](https://github.com/bartvanhoey/AbpOpenIddictRepo) you find the **BookStoreWebApi** and **BookStoreConsole** applications that we will.
+
 ## Development
 
-### Creating a new Application
-
-- Install or update the ABP CLI:
+### Create a new .NET Core WEB API
 
 ```bash
-dotnet tool install -g Volo.Abp.Cli || dotnet tool update -g Volo.Abp.Cli
+    dotnet new webapi --use-controllers -o BookStoreWebApi
 ```
 
-- Use the following ABP CLI command to create a new Blazor ABP application:
-
-```bash
-abp new AbpBlazorCustomizeLoginPage -u blazor -o AbpBlazorCustomizeLoginPage
-```
 
 ### Open & Run the Application
 

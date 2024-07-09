@@ -1,4 +1,4 @@
-﻿namespace BookStoreWebApi.Models
+﻿namespace BookStoreWebApi.Infra
 {
     public interface IHasTotalCount
     {

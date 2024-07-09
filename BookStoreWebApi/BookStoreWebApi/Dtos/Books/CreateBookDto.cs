@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStoreWebApi.Controllers.Books.Dtos
+namespace BookStoreWebApi.Dtos.Books
 {
     public class CreateBookDto
     {

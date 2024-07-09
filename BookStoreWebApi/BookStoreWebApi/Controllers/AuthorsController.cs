@@ -1,9 +1,9 @@
-﻿using BookStoreWebApi.Controllers.Authors.Dtos;
-using BookStoreWebApi.Data;
-using BookStoreWebApi.Models;
+﻿using BookStoreWebApi.Data;
+using BookStoreWebApi.Dtos.Authors;
+using BookStoreWebApi.Infra;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStoreWebApi.Controllers.Authors;
+namespace BookStoreWebApi.Controllers;
 
 [Route("api/app/author")]
 [ApiController]

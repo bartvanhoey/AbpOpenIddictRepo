@@ -1,4 +1,4 @@
-﻿using BookStoreWebApi.Controllers.Authors.Dtos;
+﻿using BookStoreWebApi.Dtos.Authors;
 
 namespace BookStoreWebApi.Data;
 
