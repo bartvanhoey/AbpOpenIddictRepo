@@ -4,7 +4,7 @@
 
 In this blog post, I will show you how you can consume a C# CRUD API in by making use of a Generic HTTP Service
 
-In the ABP Framework, to create a simple CRUD application service, you typically implement the **ICrudAppService** which has generic arguments for the different CRUD operations.
+In the ABP Framework, you typically implement the **ICrudAppService** interface, which has **generic arguments** for the different **CRUD operations**, to create a simple **CRUD application service**.
 
 ```csharp
 public interface IBookAppService : 
@@ -18,7 +18,7 @@ public interface IBookAppService :
 }
 ```
 
-By implementing the ICrudAppService, the **ABP Framework** automatically generates the following **CRUD API endpoints**.
+For each CRUD application service that implements the ICrudAppService interface, the **ABP Framework** automatically generates the following **CRUD API endpoints** in the following manner.
 
 ![Swagger endpoints BookAppService](../images/swagger_bookappservice.png)
 
@@ -32,8 +32,6 @@ The following tools are needed to be able to run the solution.
 
 - .NET 8.0 SDK
 - VsCode, Visual Studio 2022 or another compatible IDE
-
-
 
 ## Development
 
