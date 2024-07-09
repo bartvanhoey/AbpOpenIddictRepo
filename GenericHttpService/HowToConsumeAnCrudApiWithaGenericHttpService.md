@@ -18,9 +18,12 @@ public interface IBookAppService :
 }
 ```
 
-For each CRUD application service that implements the ICrudAppService interface, the **ABP Framework** automatically generates the following **CRUD API endpoints** in the following manner.
+For each **CRUD application service** that implements the **ICrudAppService** interface, the **ABP Framework** automatically generates the following **CRUD API endpoints** in the following manner:
 
 ![Swagger endpoints BookAppService](../images/swagger_bookappservice.png)
+
+
+
 
 ## Source Code
 
