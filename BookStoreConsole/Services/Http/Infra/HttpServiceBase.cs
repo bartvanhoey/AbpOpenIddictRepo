@@ -2,20 +2,15 @@
 using IdentityModel.Client;
 
 namespace BookStoreConsole.Services.Http.Infra;
-
-public class HttpServiceBase<T, TC, TU, TG, TD>(ISecureStorageService secureStorageService)
+public class HttpServiceBase<TL>
 {
-    private ISecureStorageService StorageService { get; set; } = secureStorageService;
-
-    protected async Task<Lazy<HttpClient>> GetHttpClientAsync()
+    protected Task<Lazy<HttpClient>> GetHttpClientAsync()
     {
         var httpClient = new Lazy<HttpClient>(() => new HttpClient());
-        var accessToken = await StorageService.GetAccessTokenAsync();
-        httpClient.Value.SetBearerToken(accessToken);
-        return httpClient;
+        return Task.FromResult(httpClient);
     }
 
-    protected static string ComposeUri(string uri, TG getListRequestDto)
+    protected static string ComposeUri(string uri, TL getListRequestDto)
     {
         if (getListRequestDto is IPagedRequestDto pagedRequestDto)
             return uri.Contains('?')
@@ -23,6 +18,28 @@ public class HttpServiceBase<T, TC, TU, TG, TD>(ISecureStorageService secureStor
                 : $"{uri}?skipCount={pagedRequestDto.SkipCount}&maxResultCount={pagedRequestDto.MaxResultCount}";
         return uri;
     }
-    
-    
 }
+
+
+
+// public class HttpServiceBase<T, TC, TU, TG, TD>(ISecureStorageService secureStorageService)
+// {
+//     private ISecureStorageService StorageService { get; set; } = secureStorageService;
+//
+//     protected async Task<Lazy<HttpClient>> GetHttpClientAsync()
+//     {
+//         var httpClient = new Lazy<HttpClient>(() => new HttpClient());
+//         var accessToken = await StorageService.GetAccessTokenAsync();
+//         httpClient.Value.SetBearerToken(accessToken);
+//         return httpClient;
+//     }
+//
+//     protected static string ComposeUri(string uri, TG getListRequestDto)
+//     {
+//         if (getListRequestDto is IPagedRequestDto pagedRequestDto)
+//             return uri.Contains('?')
+//                 ? $"{uri}&skipCount={pagedRequestDto.SkipCount}&maxResultCount={pagedRequestDto.MaxResultCount}"
+//                 : $"{uri}?skipCount={pagedRequestDto.SkipCount}&maxResultCount={pagedRequestDto.MaxResultCount}";
+//         return uri;
+//     }
+// }

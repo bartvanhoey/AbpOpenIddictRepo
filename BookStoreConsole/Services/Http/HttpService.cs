@@ -5,9 +5,8 @@ using BookStoreConsole.Services.SecureStorage;
 
 namespace BookStoreConsole.Services.Http;
 
-public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService)
-    : HttpServiceBase<T, TC, TU, TL, TD>(storageService), IHttpService<T, TC, TU, TL, TD>
-    where T : class
+public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<TL>, IHttpService<T, TC, TU, TL, TD>
+    where T : class 
     where TC : class
     where TU : class
     where TL : class

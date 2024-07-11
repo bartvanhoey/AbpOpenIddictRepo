@@ -2,13 +2,13 @@
 
 namespace BookStoreWebApi.Data
  {
-    public static class  BookList
+    public static class BooksResolver
     {
-        public static readonly List<BookDto> GetBooks;
+        public static readonly List<BookDto> BookItems;
 
-        static BookList()
+        static BooksResolver()
         {
-            GetBooks = new List<BookDto>
+            BookItems = new List<BookDto>
             {
                 new()
                 {

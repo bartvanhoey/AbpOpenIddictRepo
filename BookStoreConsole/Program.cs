@@ -7,12 +7,14 @@ using BookStoreConsole.Services.SecureStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
-services.AddTransient<ISecureStorageService, SecureStorageService>();
+// services.AddTransient<ISecureStorageService, SecureStorageService>();
 
 // Books
 const string bookApiUrl = "https://localhost:44336/api/app/book";
+
 services.AddTransient<IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>,
     HttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
+
 
 services.AddTransient<IBookService, BookService>(options
     => new BookService(

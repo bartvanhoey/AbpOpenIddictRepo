@@ -1,7 +1,7 @@
-﻿using BookStoreWebApi.Data;
-using BookStoreWebApi.Dtos.Books;
+﻿using BookStoreWebApi.Dtos.Books;
 using BookStoreWebApi.Infra;
 using Microsoft.AspNetCore.Mvc;
+using static BookStoreWebApi.Data.BooksResolver;
 
 namespace BookStoreWebApi.Controllers
 {
@@ -10,27 +10,22 @@ namespace BookStoreWebApi.Controllers
     public class BooksController : ControllerBase
     {
         [HttpGet]
-        public PagedResultDto<BookDto> Get() 
-            => new() { Items = BookList.GetBooks, TotalCount = BookList.GetBooks.Count };
+        public PagedResultDto<BookDto> Get() => new() { Items = BookItems, TotalCount = BookItems.Count };
 
         [HttpGet("{id}")]
-        public BookDto? Get(Guid id) 
-            => BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+        public BookDto? Get(Guid id) => BookItems.FirstOrDefault(x => x.Id == id);
 
-        
         [HttpPost]
         public BookDto Create([FromBody] CreateBookDto createBookDto)
         {
-            var bookDto = new BookDto { Name = createBookDto.Name, Type = createBookDto.Type, Price = createBookDto.Price, PublishDate = createBookDto.PublishDate, Id = createBookDto.Id};
-            BookList.GetBooks.Add(bookDto);
-            return bookDto;
+            BookItems.Add(new BookDto(createBookDto.Name,createBookDto.Type,createBookDto.Price,  createBookDto.PublishDate, createBookDto.Id));
+            return BookItems.Single(x => x.Id == createBookDto.Id);
         }
 
-        
         [HttpPut("{id}")]
         public BookDto? Put(Guid id, [FromBody] UpdateBookDto updateBookDto)
         {
-            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+            var bookDto = BookItems.FirstOrDefault(x => x.Id == id);
             if (bookDto == null) return bookDto;
             bookDto.Name = updateBookDto.Name;
             bookDto.Price = updateBookDto.Price;
@@ -39,12 +34,11 @@ namespace BookStoreWebApi.Controllers
             return bookDto;
         }
 
-        
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
-            if (bookDto != null) BookList.GetBooks.Remove(bookDto);
+            var bookDto = BookItems.FirstOrDefault(x => x.Id == id);
+            if (bookDto != null) BookItems.Remove(bookDto);
         }
     }
 }

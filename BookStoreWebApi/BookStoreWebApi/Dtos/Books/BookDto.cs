@@ -2,6 +2,19 @@ namespace BookStoreWebApi.Dtos.Books
 {
     public class BookDto
     {
+        public BookDto()
+        {
+        }
+
+        public BookDto(string? name, BookType type, float price, DateTime publishDate, Guid id)
+        {
+            Name = name;
+            Type = type;
+            Price = price;
+            PublishDate = publishDate;
+            Id = id;
+        }
+
         public Guid Id { get; set; }
         public string? Name { get; set; }
 
