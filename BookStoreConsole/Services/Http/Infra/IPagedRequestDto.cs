@@ -7,10 +7,3 @@ public interface IPagedRequestDto
     string? Sorting { get; set; }
     
 }
-
-public class PagedRequestDto : IPagedRequestDto
-{
-    public int SkipCount { get; set; } 
-    public int MaxResultCount { get; set; } = 1000;
-    public string? Sorting { get; set; }
-}

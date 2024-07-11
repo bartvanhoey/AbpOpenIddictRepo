@@ -3,8 +3,6 @@ using BookStoreConsole.Functional;
 using BookStoreConsole.Services.Http.Infra;
 using BookStoreConsole.Services.SecureStorage;
 
-
-
 namespace BookStoreConsole.Services.Http;
 
 public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService)
@@ -48,7 +46,6 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService
         var items = json.ToType<List<T>>();
 
         return new ListResultDto<T>(items);
-
     }
 
     public async Task<T> CreateAsync(string uri, TC createInputDto)
@@ -67,8 +64,6 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService
 
         httpResponse.EnsureSuccessStatusCode();
     }
-
-
 
     public async Task<T> GetAsync(string uri)
     {
