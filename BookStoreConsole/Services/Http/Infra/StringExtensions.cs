@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
-namespace BookStoreConsole.Functional;
+namespace BookStoreConsole.Services.Http.Infra;
 
 public static class StringExtensions
 {
