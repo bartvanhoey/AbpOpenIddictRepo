@@ -30,10 +30,10 @@ Copy/paste the Data/Infra and Dtos folder of the BookstoreWebApi sample project 
 ### Add a BooksController class to the Controllers folder
 
 ```csharp
-using BookStoreWebApi.Data;
 using BookStoreWebApi.Dtos.Books;
 using BookStoreWebApi.Infra;
 using Microsoft.AspNetCore.Mvc;
+using static BookStoreWebApi.Data.BooksResolver;
 
 namespace BookStoreWebApi.Controllers
 {
@@ -42,27 +42,22 @@ namespace BookStoreWebApi.Controllers
     public class BooksController : ControllerBase
     {
         [HttpGet]
-        public PagedResultDto<BookDto> Get()
-            => new() { Items = BookList.GetBooks, TotalCount = BookList.GetBooks.Count };
+        public PagedResultDto<BookDto> Get() => new() { Items = BookItems, TotalCount = BookItems.Count };
 
         [HttpGet("{id}")]
-        public BookDto? Get(Guid id)
-            => BookList.GetBooks.FirstOrDefault(x => x.Id == id);
-
+        public BookDto? Get(Guid id) => BookItems.FirstOrDefault(x => x.Id == id);
 
         [HttpPost]
         public BookDto Create([FromBody] CreateBookDto createBookDto)
         {
-            var bookDto = new BookDto { Name = createBookDto.Name, Type = createBookDto.Type, Price = createBookDto.Price, PublishDate = createBookDto.PublishDate, Id = createBookDto.Id};
-            BookList.GetBooks.Add(bookDto);
-            return bookDto;
+            BookItems.Add(new BookDto(createBookDto.Name,createBookDto.Type,createBookDto.Price,  createBookDto.PublishDate, createBookDto.Id));
+            return BookItems.Single(x => x.Id == createBookDto.Id);
         }
-
 
         [HttpPut("{id}")]
         public BookDto? Put(Guid id, [FromBody] UpdateBookDto updateBookDto)
         {
-            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
+            var bookDto = BookItems.FirstOrDefault(x => x.Id == id);
             if (bookDto == null) return bookDto;
             bookDto.Name = updateBookDto.Name;
             bookDto.Price = updateBookDto.Price;
@@ -71,12 +66,11 @@ namespace BookStoreWebApi.Controllers
             return bookDto;
         }
 
-
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-            var bookDto = BookList.GetBooks.FirstOrDefault(x => x.Id == id);
-            if (bookDto != null) BookList.GetBooks.Remove(bookDto);
+            var bookDto = BookItems.FirstOrDefault(x => x.Id == id);
+            if (bookDto != null) BookItems.Remove(bookDto);
         }
     }
 }
@@ -95,7 +89,7 @@ namespace BookStoreWebApi.Controllers
 
 ### Create a IHttpService interface
 
-Create a **IHttpService interface** with the standard CRUD method definitions in the **Http** folder
+Create a **IHttpService interface** with the standard CRUD method definitions in the **Services/Http** folder
 
 ```csharp
 public interface IHttpService<T, in TC, in TU, in TG, in TD>
@@ -108,14 +102,18 @@ public interface IHttpService<T, in TC, in TU, in TG, in TD>
 }
 ```
 
-Copy/Paste the **Infra** folder of the BookStoreConsole sample application into the **Http** folder
+Copy/Paste the **Infra** folder of the **BookStoreConsole** sample application into the **Services/Http** folder
 
 Create a **HttpService class** in the **Http** folder that implements the **IHttpService interface**
 
 ```csharp
-public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService)
-    : HttpServiceBase<T, TC, TU, TL, TD>(storageService), IHttpService<T, TC, TU, TL, TD>
-    where T : class
+using System.Net.Http.Json;
+using BookStoreConsole.Services.Http.Infra;
+
+namespace BookStoreConsole.Services.Http;
+
+public class HttpService<T, TC, TU, TL, TD> : HttpServiceBase<TL>, IHttpService<T, TC, TU, TL, TD>
+    where T : class 
     where TC : class
     where TU : class
     where TL : class
@@ -123,79 +121,87 @@ public class HttpService<T, TC, TU, TL, TD>(ISecureStorageService storageService
     public async Task<ListResultDto<T>> GetListAsync(string uri, TL? getListRequestDto = default)
     {
         if (getListRequestDto == null) return new ListResultDto<T>();
-
         var httpResponse = await (await GetHttpClientAsync()).Value.GetAsync(ComposeUri(uri, getListRequestDto));
-
+        httpResponse.EnsureSuccessStatusCode();
         var json = await httpResponse.Content.ReadAsStringAsync();
         if (json == "[]" || json.IsNullOrWhiteSpace()) return new ListResultDto<T>();
-
         if (getListRequestDto is IPagedRequestDto)
         {
             var pagedResultDto = json.ToType<PagedResultDto<T>>();
             return new PagedResultDto<T>(pagedResultDto.TotalCount,pagedResultDto.Items);
         }
-
-        var listResultDto = new ListResultDto<T>(json.ToType<List<T>>());
-        return listResultDto;
+        return new ListResultDto<T>(json.ToType<List<T>>());
     }
 
     public async Task<ListResultDto<T>> UpdateAsync(string uri, TU updateInputDto)
     {
-
-        var httpResponse = await (await GetHttpClientAsync())
-            .Value.PutAsync($"{uri}", new StringContent(updateInputDto.ToJson(), Encoding.UTF8, "application/json"));
-
+        var httpResponse = await (await GetHttpClientAsync()).Value.PutAsJsonAsync($"{uri}", updateInputDto);
+        httpResponse.EnsureSuccessStatusCode();
         var json = await httpResponse.Content.ReadAsStringAsync();
         if (json == "[]" || json.IsNullOrWhiteSpace()) return new ListResultDto<T>();
 
         if (json.StartsWith("{") && json.EndsWith("}"))
             return new ListResultDto<T>(new List<T> { json.ToType<T>() });
 
-        var items = json.ToType<List<T>>();
-
-        return new ListResultDto<T>(items);
+        return new ListResultDto<T>(json.ToType<List<T>>());
     }
 
     public async Task<T> CreateAsync(string uri, TC createInputDto)
     {
-        var httpResponse = await (await GetHttpClientAsync())
-            .Value.PostAsync(uri, new StringContent(createInputDto.ToJson(), Encoding.UTF8, "application/json"));
+        var httpResponse = await (await GetHttpClientAsync()).Value.PostAsJsonAsync(uri, createInputDto);
+        httpResponse.EnsureSuccessStatusCode();
+        return (await httpResponse.Content.ReadAsStringAsync()).ToType<T>();
+    }
 
-        var json = await httpResponse.Content.ReadAsStringAsync();
-        return json.ToType<T>();
+    public async Task CreateManyAsync(string uri, IEnumerable<TC> createInputDto)
+    {
+        var httpResponse = await (await GetHttpClientAsync()).Value.PostAsJsonAsync($"{uri}/many", createInputDto);
+        httpResponse.EnsureSuccessStatusCode();
     }
 
     public async Task<T> GetAsync(string uri)
     {
         var httpResponse = await (await GetHttpClientAsync()).Value.GetAsync(uri);
-        var json = await httpResponse.Content.ReadAsStringAsync();
-        return json.ToType<T>();
+        httpResponse.EnsureSuccessStatusCode();
+        return (await httpResponse.Content.ReadAsStringAsync()).ToType<T>();
     }
 
     public async Task DeleteAsync(string uri, TD id)
     {
         var httpResponse = await (await GetHttpClientAsync()).Value.DeleteAsync($"{uri}/{id}");
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            throw new Exception("Failed to delete");
-        }
+        httpResponse.EnsureSuccessStatusCode();
     }
 }
-
 ```
 
 ### Create a IBookService interface
 
+Copy/Paste the **Services/Books/Dtos** folder of the **BookStoreConsole** sample application into the **Services/Books/Dtos** folder
+
+Create an **IBookService interface** in the **Services/Books** folder.
+
 ```csharp
+using BookStoreConsole.Services.Books.Dtos;
+
+namespace BookStoreConsole.Services.Books;
+
 public interface IBookService
 {
     Task<IEnumerable<BookDto>> GetBooksAsync();
     Task<BookDto?> CreateBookAsync(CreateBookDto bookDto);
-    // other method definitions here ...
+    // find other method definitions in the BookStoreConsole sample project ...
 }
 ```
 
+Create an **BookService class** in the **Services/Books** folder.
+As you can see, the BookService class gets the correct HttpService via Constructor Dependency Injection
+
 ```csharp
+using BookStoreConsole.Services.Books.Dtos;
+using BookStoreConsole.Services.Http;
+
+namespace BookStoreConsole.Services.Books;
+
 public class BookService(IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid> httpService, string bookApiUrl) : IBookService
 {
     public async Task<IEnumerable<BookDto>> GetBooksAsync()
@@ -203,15 +209,49 @@ public class BookService(IHttpService<BookDto, CreateBookDto, UpdateBookDto, Get
 
     public async Task<BookDto?> CreateBookAsync(CreateBookDto bookDto)
         => await httpService.CreateAsync($"{bookApiUrl}", bookDto);
-    // other methods here ...
+    // find other methods in the BookStoreConsole sample project ...
 }
 ```
 
+## Program.cs
 
+```bash
+    dotnet add package Microsoft.Extensions.DependencyInjection
+```
 
+```csharp
+using BookStoreConsole.Services.Books;
+using BookStoreConsole.Services.Books.Dtos;
+using BookStoreConsole.Services.Http;
+using Microsoft.Extensions.DependencyInjection;
 
+// Create a ServiceCollection for the Dependency Injection
+var services = new ServiceCollection();
 
+// Add the HttpService to the the Dependency Injection System
+services.AddTransient<IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>,
+    HttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>();
 
+// Add the BookService to the the Dependency Injection System
+const string bookApiUrl = "https://localhost:44336/api/app/book";
+services.AddTransient<IBookService, BookService>(options
+    => new BookService(
+        options
+            .GetRequiredService<IHttpService<BookDto, CreateBookDto, UpdateBookDto, GetBooksPagedRequestDto, Guid>>(),
+        bookApiUrl));
+
+// Get the BookService from the Dependency Injection System
+var bookService = services.BuildServiceProvider().GetRequiredService<IBookService>();
+
+// Add a new book
+var createdBook = await bookService.CreateBookAsync(new CreateBookDto("New Book3", BookType.Adventure, DateTime.Now, 10.0f));
+
+// Get all the books
+var books = await bookService.GetBooksAsync();
+
+Console.ReadLine();
+
+```
 
 Get the [source code](https://github.com/bartvanhoey/AbpOpenIddictRepo) on GitHub.
 

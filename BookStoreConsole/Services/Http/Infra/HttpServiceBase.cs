@@ -1,7 +1,4 @@
-﻿using BookStoreConsole.Services.SecureStorage;
-using IdentityModel.Client;
-
-namespace BookStoreConsole.Services.Http.Infra;
+﻿namespace BookStoreConsole.Services.Http.Infra;
 public class HttpServiceBase<TL>
 {
     protected Task<Lazy<HttpClient>> GetHttpClientAsync()
